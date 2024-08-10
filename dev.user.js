@@ -1376,7 +1376,18 @@ function cw3() {
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            }</style>`); // Добавляем стуле для кастомных дефектов
+            }
+
+            ol.mouth>li>div>div[style*='defects'] {
+            border: none !important;
+            background-color: none !important;
+            outline: none !important; }
+
+            div#itemList>div>img[style*='defects'] {
+            border: none !important;
+            background-color: none !important;
+            outline: none !important; }
+            </style>`); // Добавляем стуле для кастомных дефектов
     // РАНЫ
       if (globals.cdSRani1) { // РАНЫ 1 СТАДИЯ
         if (globals.cdSIcon) { // КОД ИКОНОК
