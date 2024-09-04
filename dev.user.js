@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         CatWar Script DEV
-// @version      0.3
+// @version      1.0
 // @description  Новый мод-скрипт для браузерной игры CatWar. Обычно разработчиков скрипта держат в подвале, чтобы они хоть что-то делали.
 // @author       Krivodushie & Psiii
 // @copyright    2024 Дурное Сновидение (https://catwar.su/cat1293224) & Весело (https://catwar.su/cat590698)
@@ -36,7 +36,7 @@ const csDefaults = {
 
 
 
-    ,'customDefects': false //              ОТОБРАЖЕНИЕ ДЕФЕКТОВ В ИГРОВОЙ
+    ,'customDefects': true //              ОТОБРАЖЕНИЕ ДЕФЕКТОВ В ИГРОВОЙ
      ,'cdSColors': true //                   Выделять ли клетку цветом?
      ,'cdSRamki': true //                    Выделять ли клетку рамкой? (Да/Нет)
      ,'cdOpacity': "0.3" //                  Прозрачность выделения клетки
@@ -106,6 +106,8 @@ const csDefaults = {
     ,'friendlyCatWar': false //             Удалить кнопки захода в опасные БР
     ,'deleteFPTitles': false //             Убрать тайтлы у кнопок боережима
     ,'showButterflyBots': false //          Показывать бота-бабочку для прокачки бу
+    ,'fightWarning': false //               Уведомление о введении в опасный БР
+    ,'smallFightLog': false //              Сокращать лог БР
 
  //                                         СПИСОК ДРУЗЕЙ И ВРАГОВ
     ,'showEnemy': true //                    Показывать котиков из списка врагов в Игровой?
@@ -120,20 +122,28 @@ const csDefaults = {
     ,'toggleBoneTimer': false //            Свернуть таймер ношения костоправов
     ,'hideWoundWarning': true //            Скрыть предупреждение о ранах
     ,'hideFieldButton': false //            Кнопочка "Скрыть поле" для ПК-версии сайта
-    ,'newInfoBlock': true // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ДОБАВИТЬ ПОЧИНЕННОЕ ОКОШКО ИНФЫ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    ,'autoHidingBlocks': false //           Автосворачивание блоков
-     ,'ahbHistory': true //                  История
-     ,'ahbRelatives': true //                Родственные связи
-     ,'ahbParameter': true //                Параметры и навыки
-    ,'actionEndTimer': true //             Таймер до окончания действия как на телефоне !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ДОДЕЛАТЬ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    ,'diverSiren': false //                Громкие звуки при большом сне на нырялках !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ДОБАВИТЬ ВЫДЕЛЕНИЕ ВКЛЮЧЕНЫ ЛИ ОНИ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    ,'newInfoBlock': true //
+     ,'ahbHistory': false //                  История
+     ,'ahbRelatives': false //                Родственные связи
+     ,'ahbParameter': false //                Параметры и навыки
+    ,'actionEndTimer': true //             Таймер до окончания действия как на телефоне
+    ,'diverSiren': false //                Громкие звуки при большом сне на нырялках
      ,'diverSirenMinutes' : 35 //           На какой минуте начинает срабатывать сирена?
-     ,'diverSirenVol': 0.7 //               Громкость звука (Дефолтный звук - сирена минус 10 социальный кредит)
+     ,'diverSirenVol': 0.7 //               Громкость звука (Дефолтный звук сирена минус 10 социальный кредит)
      ,'diverSirenHref' : "https://github.com/CatWarScript/CatWarScript/raw/main/audios/SIRENA_SOCIAL_CREDIT.mp3"
      ,'dsY': 50
      ,'dsX': 50
     ,'kalinnikFunction': false //          Не включайте это
      ,'kalinnikFunctionVolume': 0.7 //      (Пожалуйста)
+    ,'smellTimer': false //                Таймер до следующего нюха
+     ,'smellTimerVol': 0.7 //               Громкость таймера нюха
+     ,'smellTimerHref': 'хз' //             Ссылка на звук таймера нюха
+    ,'newLS': false //                     Уведомлять о новых ЛС
+     ,'newLSVol': 0.7 //                    Громкость уведомления о новом ЛС
+    ,'newChat': false //                   Уведомлять о новых сообщениях в Чате
+     ,'newChatVol': 0.7 //                  Громкость уведомления о новом чате
+    ,'raiseNote': false //                 Уведомление о поднятии в игровой
+    ,'raiseNoteVol': 0.7 //                 Громкость уведомления о поднятии
 
     ,'treeMap': true //                    ОКОШКО ЛАЗАЛОК
      ,'tmResetNote': true //                Уведомление при изменении карты
@@ -154,6 +164,7 @@ const csDefaults = {
 
  //                                        СТИЛИ
     ,'selTheme': 0
+    ,'setka': false //                      Сетка (включить её крч)
     ,'cageGrid': true //                    Сетка ячеек локации
      ,'cgColor': "#ffffff" //                Цвет сетки ячеек
      ,'cageGridV' : false //                 Сетка как в Варомоде
@@ -392,6 +403,7 @@ catch (error) {
 function sett() {
   let cssForSett = `
    <style>
+
     td#tableContent::-webkit-scrollbar {
     width: 10px; }
 
@@ -482,13 +494,14 @@ function sett() {
     justify-content: center;
     position: relative;
     top: 395px;
-    letter-spacing: 10px !important; }
+    letter-spacing: 10px !important;
+    margin-right: 10px !important; }
 
-    div#headerButtons>a#info::before {
-    content: "✦ "; }
+/* div#headerButtons>a#info::before {
+content: "✦ "; }
 
-    div#headerButtons>a#info::after {
-    content: " ✦"; }
+div#headerButtons>a#info::after {
+content: " ✦"; } */
 
     div.contacts {
     display: flex;
@@ -523,7 +536,6 @@ function sett() {
     a#bs:hover {
     filter: none; }
 
-
     td#tableContent {
     display: block;
     overflow: auto;
@@ -534,29 +546,142 @@ function sett() {
     padding-left: 10px;
     padding-bottom: 10px; }
 
-    div#search  {
+    h2#cwsSetListHeader {
+    width: 95%;
+    background-color: var(--cwsc-bckg-4);
+    display: grid;
+    align-content: space-between;
+    margin: 15px 15px 0px 0px;
+    padding: 8px;
+    border-radius: 5px; }
+
+/*     div#search  {
     display: block !important;
     width: 95% !important;
     background-color: var(--cwsc-bckg-4);
     border-radius: 10px;
     font-size: 25px;
     margin: 10px;
-    padding: 10px; }
+    padding: 10px; } */
 
-      table#defectTable tr td {
-        border: #000 2px solid;
-        width: 100px;
-        height: 20px;
-        text-align: center;
-      }
-      table#defectTable tr td input[type=color]  {
-        width: 50px !important;
-      }
-      table#defectTable tr td input[type=checkbox]  {
-        margin: 7px;
-        margin-top: 4px;
-        margin-bottom: 4px;
-      }
+div#trOne {
+width: 100%;
+display: flex; }
+
+div#trTwo {
+width: 100%;
+display: flex;
+flex-wrap: wrap; }
+
+div#trThree {
+width: 100%;
+display: flex; }
+
+div#trFour {
+width: 100%;
+display: flex; }
+
+div#trFive {
+width: 100%;
+display: flex; }
+
+div#trSix {
+width: 100%;
+display: flex; }
+
+div#sbClock, div#sbFight, div#sbCostumes, div#sbTrees {
+width: 50%;
+background-color: var(--cwsc-bckg-3);
+display: grid;
+align-content: space-between;
+margin: 15px 15px 0px 0px;
+padding: 8px;
+border-radius: 5px; }
+
+div#sbBoneCorrect, div#sbLS {
+width: 100%;
+background-color: var(--cwsc-bckg-3);
+display: grid;
+align-content: space-between;
+margin: 15px 15px 0px 0px;
+padding: 8px;
+border-radius: 5px; }
+
+div#sbTemplates, div#sbOthers {
+width: 50%;
+background-color: var(--cwsc-bckg-3);
+display: grid;
+align-content: stretch;
+margin: 15px 15px 0px 0px;
+padding: 8px;
+border-radius: 5px; }
+
+div#sbGame {
+width: 100%;
+background-color: var(--cwsc-bckg-3);
+display: grid;
+align-content: space-between;
+margin: 15px 15px 0px 0px;
+padding: 8px;
+border-radius: 5px; }
+
+div#sbStyles {
+width: 100%;
+background-color: var(--cwsc-bckg-3);
+display: grid;
+align-content: space-between;
+margin: 15px 15px 0px 0px;
+padding: 8px;
+border-radius: 5px; }
+
+div.setHead>p {
+margin: 0px;
+font-weight: 600;
+font-size: 16px;
+margin-bottom: 5px; }
+
+div.setHead {
+border-bottom: 4px solid var(--cwsc-brdr-4);
+height: 24px !important;
+margin-bottom: 4px; }
+
+table#defectTable, table#itemTable, table#templateTable, table#replaceTable {
+border: 4px solid var(--cwsc-brdr-5); }
+
+table#templateTable, table#replaceTable {
+margin: 5px 0px;
+}
+
+table#defectTable tr td, table#itemTable tr td, table#templateTable tr td, table#replaceTable tr td {
+border: 2px dotted var(--cwsc-brdr-1);
+width: 100px;
+height: 20px;
+text-align: center; }
+
+table#defectTable tr td input, table#itemTable tr td input, table#templateTable tr td input, table#replaceTable tr td input {
+margin: 4px 7px; }
+
+table#defectTable tr td input[type=color], table#itemTable tr td input[type=color]  {
+width: 50px !important;
+height: 25px; }
+
+table#defectTable>tbody>tr:first-of-type, table#defectTable>tbody>tr:nth-of-type(7), table#defectTable>tbody>tr:nth-of-type(10)>td:nth-of-type(2),
+table#itemTable>tbody>tr:first-of-type, table#itemTable>tbody>tr:nth-of-type(4), table#itemTable>tbody>tr:nth-of-type(7), table#itemTable>tbody>tr:nth-of-type(10),
+table#templateTable>tbody>tr:first-of-type, table#templateTable>tbody>tr:nth-of-type(4), table#replaceTable>tbody>tr:first-of-type {
+background-color: var(--cwsc-bckg-4) !important;
+font-weight: 600;
+font-size: 13px; }
+
+table#defectTable>tbody>tr:not(:first-of-type), table#itemTable>tbody>tr:not(:first-of-type), table#templateTable>tbody>tr:not(:first-of-type), table#replaceTable>tbody>tr:not(:first-of-type) {
+background-color: var(--cwsc-bckg-7); }
+
+
+div#libLastUpd>small>i>p {
+margin: 0; }
+
+div#libCustom {
+margin: 10px 0px; }
+
    </style>`
   $('head').append(cssForSett);
 
@@ -566,7 +691,7 @@ function sett() {
       <a href="#" class="active" data-target="1">CatWar Script</a><br>
       <a href="#" class="passive" data-target="2">Варомод</a><br>
       <a href="#" class="passive" data-target="3">CW:Shed</a><br>
-      <a href="#" id="info" class="passive" data-target="4">О нас</a>
+      <a href="#" id="info" class="passive" data-target="4">✦ О нас ✦</a>
     </div><br></td></tr></tbody></table>
      <div class="contacts">
        <div><a id="vk">
@@ -578,192 +703,245 @@ function sett() {
        <div><a id="bs">
          <svg width="48" height="48" viewBox="0 0 48 47" version="1.1" id="svg4" sodipodi:docname="logoLetterB.4ec8e (1).svg" inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview id="namedview4" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.25" inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1" inkscape:zoom="8.9571167" inkscape:cx="19.481716" inkscape:cy="24.059081" inkscape:window-width="1680" inkscape:window-height="987" inkscape:window-x="1672" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="svg4" /><defs id="defs4"><linearGradient id="linear0" gradientUnits="userSpaceOnUse" x1="6.4215002" y1="-6.46875" x2="-34.537899" y2="88.152298" gradientTransform="scale(0.557143,0.546512)"><stop offset="0" style="stop-color:rgb(93.72549%,47.058824%,16.078431%);stop-opacity:1;" id="stop1" /><stop offset="0.28" style="stop-color:rgb(94.117647%,41.176471%,16.470588%);stop-opacity:1;" id="stop2" /><stop offset="0.63" style="stop-color:rgb(94.509804%,36.862745%,17.254902%);stop-opacity:1;" id="stop3" /><stop offset="1" style="stop-color:rgb(94.509804%,35.294118%,17.254902%);stop-opacity:1;" id="stop4" /></linearGradient></defs><g id="surface1" transform="translate(4.5004891,0.0390625)"><path style="fill:url(#linear0);fill-rule:evenodd;stroke:none" d="M 9.34375,0 1.242188,28.027344 0.949219,29.011719 c -2.789063,9.636719 0.398437,17.785156 11.769531,17.910156 1.457031,-3.65625 3.46875,-8.699219 6.042969,-15.132813 H 12.601562 L 19.203125,8.847656 C 19.21875,8.792969 19.242188,8.738281 19.269531,8.6875 L 21.78125,0 Z M 27.753906,25.339844 12.761719,46.921875 h 0.234375 c 11.074218,0 22.453125,-8.191406 25.261718,-17.914063 2.621094,-9.03125 -1.832031,-16.503906 -11.332031,-17.496093 l -5.53125,13.828125 z m 0,0" id="path4" /></g></svg>
        </a></div>
-     </div></td><td id="tableContent"><div id="search">CatWar Script</div><table><tbody><tr><td>
+     </div></td><td id="tableContent"><!--<div id="search">CatWar Script</div>--><table><tbody><tr><td>
      <div class="content">
      <div class="active" id="div1">
-
-      <div id="sbTemplates" class="setHMid">
-       <div id="cwsSetList"><div><input class="cs-set" id="textTemplates" type="checkbox"${globals.textTemplates?' checked':''}><label for="textTemplates">Блок с шаблонами в личных сообщениях</label></div>
-       <div><input class="cs-set" id="toggleTT" type="checkbox"${globals.toggleTT?' checked':''}><label for="toggleTT">Изначально сворачивать блок с шаблонами</label></div>
-       <div><input class="cs-set" id="ttReplaceTheme" type="checkbox"${globals.ttReplaceTheme?' checked':''}><label for="ttReplaceTheme">Вставлять название шаблона в тему сообщения</label></div>
-       <div><input class="cs-set" id="ttChat" type="checkbox"${globals.ttChat?' checked':''}><label for="ttChat">Отображать шаблоны в чатах</label></div>
-       <div><input class="cs-set" id="toggleTTChat" type="checkbox"${globals.toggleTTChat?' checked':''}><label for="toggleTTChat">Сворачивать шаблоны чатов изначально</label></div>
-       <div><input class="cs-set" id="bloglentTextTemplates" type="checkbox"${globals.bloglentTextTemplates?' checked':''}><label for="bloglentTextTemplates">Отображать шаблоны для БЛОГОЛЕНТЫ</label></div>
-       <div><input class="cs-set" id="toggleTTBlog" type="checkbox"${globals.toggleTTBlog?' checked':''}><label for="toggleTTBlog">Сворачивать шаблоны БЛОГОЛЕНТЫ изначально</label></div>
-       <div><input class="cs-set" id="ttReplaceThemeB" type="checkbox"${globals.ttReplaceThemeB?' checked':''}><label for="ttReplaceThemeB">Вставлять название шаблона как название поста</label></div><hr>
-      </div>
-
-      <div id="sbClock" class="setHMid">
+<div id="cwsSetList">
+<h2 id="cwsSetListHeader">Настройки CatWar Script</h2>
+<div id="trOne">
+    <div id="sbClock"><div class="setHead" id="clockHead"><p>Часы</p></div>
        <div><input class="cs-set" id="inGameClock" type="checkbox"${globals.inGameClock?' checked':''}><label for="inGameClock">Часы в игровой</label></div>
        <div><input class="cs-set" id="showDate" type="checkbox"${globals.isDateShow?' checked':''}><label for="showDate">Показывать дату</label></div>
-       <div><input class="cs-set" id="movableClocks" type="checkbox"${globals.movableClocks?' checked':''}><label for="movableClocks">Перетаскиваемый блок часов (на телефонах перетаскивание пока не работает)</label></div>
-       <table><tr><td><div><input class="cs-set" id="deviceTime" type="radio" name="timeSource"${!globals.isClockMoscow?' checked':''}><label for="deviceTime">Время с устройства</label></div></td>
-       <td><div><input class="cs-set" id="moscowTime" type="radio" name="timeSource"${globals.isClockMoscow?' checked':''}><label for="moscowTime">Московское время</label></div></td></tr></table>
+       <div><input class="cs-set" id="movableClocks" type="checkbox"${globals.movableClocks?' checked':''}><label for="movableClocks">Перетаскиваемый блок часов<br><small><i>!!! Не работает на телефонах</i></small></label></div>
+       <div><input class="cs-set" id="deviceTime" type="radio" name="timeSource"${!globals.isClockMoscow?' checked':''}><label for="deviceTime">Время с устройства</label></div>
+       <div><input class="cs-set" id="moscowTime" type="radio" name="timeSource"${globals.isClockMoscow?' checked':''}><label for="moscowTime">Московское время</label></div>
        <div><input class="cs-set" id="clockFontWeight" type="number"${globals.clockFontWeight?' checked':''} style="width: 55px;"> <label for="clockFontWeight">Размер шрифта часов</label></div>
-      </div>
+    </div>
+    <div id="sbFight"><div class="setHead" id="fightHead"><p>Боевой режим</p></div>
+       <div><input class="cs-set" id="phoneFightPanel" type="checkbox"${globals.phoneFightPanel?' checked':''}><label for="phoneFightPanel">Удобная панель боережима для телефонщиков</label></div>
+       <div><input class="cs-set" id="friendlyCatWar" type="checkbox"${globals.friendlyCatWar?' checked':''}><label for="friendlyCatWar">Убрать кнопки входа в опасные режимы</label></div>
+       <div><input class="cs-set" id="smallFightLog" type="checkbox"${globals.smallFightLog?' checked':''}><label for="smallFightLog">Сокращать лог боережима</label></div>
+       <div><input class="cs-set" id="fightWarning" type="checkbox"${globals.fightWarning?' checked':''}><label for="fightWarning">Звуковое уведомление при нападении на вас</label></div>
+       <div><input class="cs-set" id="deleteFPTitles" type="checkbox"${globals.deleteFPTitles?' checked':''}><label for="deleteFPTitles">Убрать подписи к кнопкам<br><small><i>!!! Только для телефонов</i></small></label></div>
+    </div>
 
-       <div><input class="cs-set" id="phoneFightPanel" type="checkbox"${globals.phoneFightPanel?' checked':''}><label for="phoneFightPanel">Переместить кнопочки окошка БР для телефонщиков</label></div><hr>
-       <div><input class="cs-set" id="friendlyCatWar" type="checkbox"${globals.friendlyCatWar?' checked':''}><label for="friendlyCatWar">Убрать кнопки входа в опасные боережимы</label></div><hr>
+</div><div id="trTwo">
+    <div id="sbBoneCorrect"><div class="setHead" id="boneCorrectHead"><p>Костоправы</p></div>
+       <div><input class="cs-set" id="boneCorrectTimer" type="checkbox"${globals.boneCorrectTimer?' checked':''}><label for="boneCorrectTimer">Таймер для снятия костоправов</label></div>
+       <div><input class="cs-set" id="toggleBoneTimer" type="checkbox"${globals.toggleBoneTimer?' checked':''}><label for="toggleBoneTimer">Изначально сворачивать блок таймера костоправов</label></div>
+    </div>
+    <div id="sbLS"><div class="setHead" id="lsHead"><p>Личные сообщения</p></div>
+       <div id="dntRnd"><div id="dontRdnLS"><input class="cs-set" id="dontReadenLS" type="checkbox"${globals.dontReadenLS?' checked':''}><label for="dontReadenLS">Непрочитанные сообщения только для себя</label></div><br>
+       <button type="button" id="clearDontReadButton">Обнулить счётчик непрочитанных ЛС</button><br><br>
+       <div><input class="cs-set" id="timerForLS" type="checkbox"${globals.timerForLS?' checked':''}><label for="timerForLS">Выделение сообщений, которые скоро удалятся<br><small><i>!!! Выделяет непрочитанные сообщения, которые были получены/отправлены от 6 до 14 дней назад</i></small></label></div>
+    </div></div>
 
-       <div><input class="cs-set" id="nightLagsWarning" type="checkbox"${globals.nightLagsWarning?' checked':''}><label for="nightLagsWarning">Предупреждение об осторожности на водах/лазательных локациях в период с 03:00 по 04:00 по МСК</label></div><hr>
-
-        <div id="dontRdnLS"><input class="cs-set" id="dontReadenLS" type="checkbox"${globals.dontReadenLS?' checked':''}><label for="dontReadenLS">“Непрочитанное ЛС” только для себя</label></div>
-       <button type="button" id="clearDontReadButton">Нажми меня!</button><label for="clearDontReadButton">Кнопка, чтобы починить (обнулить) счётчик непрочитанных ЛС</label><br><hr>
-       <div><input class="cs-set" id="timerForLS" type="checkbox"${globals.timerForLS?' checked':''}><label for="timerForLS">Выделение сообщений в ЛС, которые скоро удалятся (выделяет непрочитанные ЛС, которые были получены/отправлены от 6 до 14 дней назад)</label></div><hr>
-
-        <div><input class="cs-set" id="hideWoundWarning" type="checkbox"${globals.hideWoundWarning?' checked':''}><label for="hideWoundWarning">Убрать предупреждение "Вы ранены" со всех страниц сайта</label></div><hr>
-       <div><input class="cs-set" id="brightGameField" type="checkbox"${globals.brightGameField?' checked':''}><label for="brightGameField">Не затемнять окошко игровой</label></div><hr>
-       <div><input class="cs-set" id="showButterflyBots" type="checkbox"${globals.showButterflyBots?' checked':''}><label for="showButterflyBots">Выделять бота-бабочку для прокачки БУ в Игровой</label></div><hr>
-       <div><input class="cs-set" id="darkCatTooltip" type="checkbox"${globals.darkCatTooltip?' checked':''}><label for="darkCatTooltip">Тёмное окошко информации о персонажах в Игровой</label></div><hr>
-
-      <div id="sbBoneCorrect" class="setHMid">
-       <div><input class="cs-set" id="boneCorrectTimer" type="checkbox"${globals.boneCorrectTimer?' checked':''}><label for="boneCorrectTimer">Таймер снятия костоправов</label></div>
-       <div><input class="cs-set" id="toggleBoneTimer" type="checkbox"${globals.toggleBoneTimer?' checked':''}><label for="toggleBoneTimer">Изначально сворачивать блок таймера костоправов</label></div><hr>
-      </div>
-
-       <div><input class="cs-set" id="deleteFPTitles" type="checkbox"${globals.deleteFPTitles?' checked':''}><label for="deleteFPTitles">Убрать подписи к кнопкам боережима <small>(Только для телефонов)</small></label></div><hr>
-
-
-
-      <div id="sbCostumes" class="setHMid"> <span id="lastUpdateDate">k</span>
-       <div><input class="cs-set" id="costumeLibrary" type="checkbox"${globals.costumeLibrary?' checked':''}><label for="costumeLibrary">Библиотека костюмов</label></div>
-       <div><input class="cs-set" id="watermarkCostumes" type="checkbox"${globals.watermarkCostumes?' checked':''}><label for="watermarkCostumes">Наш значок у костюмов, добавленных библиотекой</label></div><br><br>
-       <div><input class="cs-set" id="clRemoveAllTongues" type="checkbox"${globals.clRemoveAllTongues?' checked':''}><label for="clRemoveAllTongues">Убрать все языки</label></div>
-       <div><input class="cs-set" id="clRemoveAllCostumes" type="checkbox"${globals.clRemoveAllCostumes?' checked':''}><label for="clRemoveAllCostumes">Убрать все костюмы</label></div>
-      </div>
-
-       <div><input class="cs-set" id="cageGrid" type="checkbox"${globals.cageGrid?' checked':''}><label for="cageGrid">Сетка ячеек локации</label></div>
-       <div><input class="cs-set" id="cgColor" type="color"${globals.cgColor?' checked':''} style="width: 35px;"><label for="cgColor">Цвет сетки ячеек локации</label></div>
-       <div><input class="cs-set" id="cgOpacity" type="number"${globals.cgOpacity?' checked':''} style="width: 55px;" step="0.01" max="1" min="0"><label for="cgOpacity">Прозрачность сетки ячеек локации</label></div>
-       <div><input class="cs-set" id="cageGridV" type="checkbox"${globals.cageGridV?' checked':''}><label for="cageGridV">Сетка как в варомоде</label></div>
-        <div><input class="cs-set" id="playerCustom" type="checkbox"${globals.playerCustom?' checked':''}><label for="playerCustom">Игровая из конструктора игровой</label></div>
-
-      <div id="sbSiren" class="setHMid">
-       <div><input class="cs-set" id="diverSiren" type="checkbox"${globals.diverSiren?' checked':''}><label for="diverSiren">ЧТООООО СИРЕНА ДЛЯ НЫРЯЮЩИХ ОГО ВАУ</label></div>
-       <div><input class="cs-set" id="diverSirenVol" type="number"${globals.diverSirenVol?' checked':''} style="width: 55px;" step="0.1" max="1" min="0"> <label for="diverSirenVol">Громкость сирены ныряющих</label></div>
-       <div><input class="cs-set" id="diverSirenMinutes" type="number"${globals.diverSirenMinutes?' checked':''} style="width: 40px;" step="5" max="40" min="5"> <label for="diverSirenMinutes">Во сколько минут начинает срабатывать сирена</label></div>
-
-       <input class="cs-set" id="dsX" type="number"${globals.dsX?' checked':''} style="width: 55px;" step="5"> <input class="cs-set" id="dsY" type="number"${globals.dsY?' checked':''} style="width: 55px;" step="5"><button id="testSiren">Тест</button>
-       <div><input class="cs-set" id="diverSirenHref" type="text"${globals.diverSirenHref?' checked':''} style="width: 350px;" step="5"> <label for="diverSirenHref">Ссылка на звук сирены</label></div>
-      </div>
-
-
-       <div><input class="cs-set" id="cdSDivers" type="checkbox"${globals.cdSDivers?' checked':''}><label for="cdSDivers">Выделять ныряющих в Игровой</label></div><hr>
-       <div><input class="cs-set" id="cdSPodstilki" type="checkbox"${globals.cdSPodstilki?' checked':''}></div><hr>
-      <div id="sbTrees" class="setHMid">
-       <div><input class="cs-set" id="treeMap" type="checkbox"${globals.treeMap?' checked':''}><label for="treeMap">Редактор карт в игровой</label></div>
+</div><div id="trThree">
+    <div id="sbTrees"><div class="setHead" id="treesHead"><p>Лазательные локации</p></div>
+       <div><input class="cs-set" id="treeMap" type="checkbox"${globals.treeMap?' checked':''}><label for="treeMap">Минное поле в игровой</label></div>
        <div><input class="cs-set" id="tmFolded" type="checkbox"${globals.tmFolded?' checked':''}><label for="tmFolded">Изначально сворачивать окошко</label></div>
-       <div><input class="cs-set" id="tmShowVolume" type="checkbox"${globals.tmShowVolume?' checked':''}><label for="tmShowVolume">Громкость в чате от ботов (веток)</label></div>
+       <div><input class="cs-set" id="tmShowVolume" type="checkbox"${globals.tmShowVolume?' checked':''}><label for="tmShowVolume">Громкость в чате от ботов</label></div>
        <div><input class="cs-set" id="tmResetNote" type="checkbox"${globals.tmResetNote?' checked':''}><label for="tmResetNote">Звуковое уведомление при смене карты</label></div>
+       <table><tr><td><label for="tmVariant">Внешний вид редактора</label></td><td>
        <select class="cs-set" id="tmVariant">
        <option value="0">Классический</option>
        <option value="1">Компактный</option>
        <option value="2">Горизонтальный</option>
-       </select><label for="tmVariant"> Вариант визуала редактора карт</label><br><br>
-      </div>
+       </select></td></tr></table>
+    </div>
+    <div id="sbCostumes"><div class="setHead" id="costumesHead"><p>Библиотека костюмов</p></div>
 
-      <div id="sbDefects" class="setHMid">
-       <table id="defectTable">
-         <tr>
-           <td>Раны</td>
-           <td>Отравление</td>
-           <td>Ушибы</td>
-           <td>Переломы</td>
-           <td>Кашель</td>
-           <td>Грязь</td>
-         </tr>
-         <tr>
-           <td><input class="cs-set" id="cdCRani" type="color"${globals.cdCRani?' checked':''} style="width: 35px;"></td>
-           <td><input class="cs-set" id="cdCPoison" type="color"${globals.cdCPoison?' checked':''} style="width: 35px;"></td>
-           <td><input class="cs-set" id="cdCTrauma" type="color"${globals.cdCTrauma?' checked':''} style="width: 35px;"></td>
-           <td><input class="cs-set" id="cdCDrown" type="color"${globals.cdCDrown?' checked':''} style="width: 35px;"></td>
-           <td><input class="cs-set" id="cdCCough" type="color"${globals.cdCCough?' checked':''} style="width: 35px;"></td>
-           <td><input class="cs-set" id="cdCGryaz" type="color"${globals.cdCGryaz?' checked':''} style="width: 35px;"></td>
-         </tr>
-         <tr>
-           <td><input class="cs-set" id="cdSRani1" type="checkbox"${globals.cdSRani1?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
-           <td><input class="cs-set" id="cdSPoison1" type="checkbox"${globals.cdSPoison1?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
-           <td><input class="cs-set" id="cdSTrauma1" type="checkbox"${globals.cdSTrauma1?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
-           <td><input class="cs-set" id="cdSDrown1" type="checkbox"${globals.cdSDrown1?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
-           <td><input class="cs-set" id="cdSCough" type="checkbox"${globals.cdSCough?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
-           <td><input class="cs-set" id="cdSGryaz1" type="checkbox"${globals.cdSGryaz1?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
-         </tr>
-         <tr>
-           <td><input class="cs-set" id="cdSRani2" type="checkbox"${globals.cdSRani2?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
-           <td><input class="cs-set" id="cdSPoison2" type="checkbox"${globals.cdSPoison2?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
-           <td><input class="cs-set" id="cdSTrauma2" type="checkbox"${globals.cdSTrauma2?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
-           <td><input class="cs-set" id="cdSDrown2" type="checkbox"${globals.cdSDrown2?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
-           <td>Подстилки</td>
-           <td><input class="cs-set" id="cdSGryaz2" type="checkbox"${globals.cdSGryaz2?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
-         </tr>
-         <tr>
-           <td><input class="cs-set" id="cdSRani3" type="checkbox"${globals.cdSRani3?' checked':''}><input class="cs-set" id="cdSRani3B" type="checkbox"${globals.cdSRani3B?' checked':''}></td>
-           <td><input class="cs-set" id="cdSPoison3" type="checkbox"${globals.cdSPoison3?' checked':''}><input class="cs-set" id="cdSPoison3B" type="checkbox"${globals.cdSPoison3B?' checked':''}></td>
-           <td><input class="cs-set" id="cdSTrauma3" type="checkbox"${globals.cdSTrauma3?' checked':''}><input class="cs-set" id="cdSTrauma3B" type="checkbox"${globals.cdSTrauma3B?' checked':''}></td>
-           <td><input class="cs-set" id="cdSDrown3" type="checkbox"${globals.cdSDrown3?' checked':''}><input class="cs-set" id="cdSDrown3B" type="checkbox"${globals.cdSDrown3B?' checked':''}></td>
-           <td><input class="cs-set" id="cdCPodstilki" type="color"${globals.cdCPodstilki?' checked':''} style="width: 35px;"></td>
-           <td><input class="cs-set" id="cdSGryaz3" type="checkbox"${globals.cdSGryaz3?' checked':''}><input class="cs-set" id="cdSGryaz3B" type="checkbox"${globals.cdSGryaz3B?' checked':''}></td>
-         </tr>
-         <tr>
-           <td><input class="cs-set" id="cdSRani4" type="checkbox"${globals.cdSRani4?' checked':''}><input class="cs-set" id="cdSRani4B" type="checkbox"${globals.cdSRani4B?' checked':''}></td>
-           <td><input class="cs-set" id="cdSPoison4" type="checkbox"${globals.cdSPoison4?' checked':''}><input class="cs-set" id="cdSPoison4B" type="checkbox"${globals.cdSPoison4B?' checked':''}></td>
-           <td><input class="cs-set" id="cdSTrauma4" type="checkbox"${globals.cdSTrauma4?' checked':''}><input class="cs-set" id="cdSTrauma4B" type="checkbox"${globals.cdSTrauma4B?' checked':''}></td>
-           <td><input class="cs-set" id="cdSDrown4" type="checkbox"${globals.cdSDrown4?' checked':''}><input class="cs-set" id="cdSDrown4B" type="checkbox"${globals.cdSDrown4B?' checked':''}></td>
-           <td><input class="cs-set" id="cdSPodstilki" type="checkbox"${globals.cdSPodstilki?' checked':''}></td>
-           <td><input class="cs-set" id="cdSGryaz4" type="checkbox"${globals.cdSGryaz4?' checked':''}><input class="cs-set" id="cdSGryaz4B" type="checkbox"${globals.cdSGryaz4B?' checked':''}></td>
-         </tr>
-       </table>
-       <div><input class="cs-set" id="customDefects" type="checkbox"${globals.customDefects?' checked':''}><label for="customDefects">Кастом дефектс</label></div>
-       <div><input class="cs-set" id="cdSColors" type="checkbox"${globals.cdSColors?' checked':''}><label for="cdSColors">Выделять цветную клеточку</label></div>
-       <table><tr><td><div><input class="cs-set" id="cdSRamkiFalse" type="radio" name="iscdsramki"${!globals.cdSRamki?' checked':''} value="false"><label for="cdSRamkiFalse">Выделять всю клетку</label></div></td>
-       <td><div><input class="cs-set" id="cdSRamkiTrue" type="radio" name="iscdsramki"${globals.cdSRamki?' checked':''} value="true"><label for="cdSRamkiTrue">Выделять рамку</label></div></td></tr></table>
-       <div><input class="cs-set" id="cdSIcon" type="checkbox"${globals.cdSIcon?' checked':''}><label for="cdSIcon">Показывать иконки дефектов</label></div>
-        <div><input class="cs-set" id="cdOpacity" type="number"${globals.cdOpacity?' checked':''} style="width: 45px;" step="0.05" max="1" min="0"> <label for="cdOpacity">Прозрачность рамки/выделенной клетки</label></div>
-      </div>
-      <div id="sbItems" class="setHMid">
-      <table id="defectTable">
-         <tr>
-           <td>Травы</td>
-           <td>Мох</td>
-           <td>Паутина</td>
-           <td>Ветки</td>
-           <td>Пыль</td>
-           <td>Мусор</td>
-         </tr>
-         <tr>
-           <td><input class="cs-set" id="ciCHerb" type="color"${globals.ciCHerb?' checked':''} style="width: 35px;"></td>
-           <td><input class="cs-set" id="ciCMoss" type="color"${globals.ciCMoss?' checked':''} style="width: 35px;"></td>
-           <td><input class="cs-set" id="ciCWeb" type="color"${globals.ciCWeb?' checked':''} style="width: 35px;"></td>
-           <td><input class="cs-set" id="ciCStick" type="color"${globals.ciCStick?' checked':''} style="width: 35px;"></td>
-           <td><input class="cs-set" id="ciCDust" type="color"${globals.ciCDust?' checked':''} style="width: 35px;"></td>
-           <td><input class="cs-set" id="ciCMusor" type="color"${globals.ciCMusor?' checked':''} style="width: 35px;"></td>
-         </tr>
-         <tr>
-           <td><input class="cs-set" id="ciSHerb" type="checkbox"${globals.ciSHerb?' checked':''}>
-           <td><input class="cs-set" id="ciSMoss" type="checkbox"${globals.ciSMoss?' checked':''}>
-           <td><input class="cs-set" id="ciSWeb" type="checkbox"${globals.ciSWeb?' checked':''}>
-           <td><input class="cs-set" id="ciSStick" type="checkbox"${globals.ciSStick?' checked':''}>
-           <td><input class="cs-set" id="ciSDust" type="checkbox"${globals.ciSDust?' checked':''}>
-           <td><input class="cs-set" id="ciSMusor" type="checkbox"${globals.ciSMusor?' checked':''}>
-         </tr>
-       </table>
-        <div><input class="cs-set" id="ciOpacity" type="number"${globals.ciOpacity?' checked':''} style="width: 45px;" step="0.05" max="1" min="0"> <label for="ciOpacity">Прозрачность выделения травки</label></div>
-      </div>
+       <!-- Наикраще мiсце для хорошего сексу бiблиотека бiблиотека... -->
+       <div><input class="cs-set" id="costumeLibrary" type="checkbox"${globals.costumeLibrary?' checked':''}><label for="costumeLibrary">Библиотека костюмов</label></div>
+       <div><input class="cs-set" id="watermarkCostumes" type="checkbox"${globals.watermarkCostumes?' checked':''}><label for="watermarkCostumes">Значок у костюмов, добавленных библиотекой</label></div>
+       <div><input class="cs-set" id="clRemoveAllCostumes" type="checkbox"${globals.clRemoveAllCostumes?' checked':''}><label for="clRemoveAllCostumes">Убрать сайтовые костюмы</label></div>
+       <div><input class="cs-set" id="clRemoveAllTongues" type="checkbox"${globals.clRemoveAllTongues?' checked':''}><label for="clRemoveAllTongues">Убрать все языки</label></div>
 
-        <div>
-        <select class="cs-set" id="selTheme">
-        <option value="0">Классическая CatWar Script</option>
-        <option value="1">Вторая CatWar Script</option>
-        <option value="2">Тёмная CatWar Script</option>
-        <option value="3">Хуй</option>
-        <option value="4">Пиздец</option>
-        <option value="5">8=======D</option>
+       <div id="libCustom"><div><input class="cs-set" id="clLakeUniverse" type="checkbox"${globals.clLakeUniverse?' checked':''}><label for="clLakeUniverse">Озёрная вселенная</label></div>
+       <div><input class="cs-set" id="clSeaUniverse" type="checkbox"${globals.clSeaUniverse?' checked':''}><label for="clSeaUniverse">Морская вселенная</label></div>
+       <div><input class="cs-set" id="clCreatorUniverse" type="checkbox"${globals.clCreatorUniverse?' checked':''}><label for="clCreatorUniverse">Вселенная творцов</label></div>
+       <div><input class="cs-set" id="clMemeCostumes" type="checkbox"${globals.clMemeCostumes?' checked':''}><label for="clMemeCostumes">Шуточные костюмы</label></div></div>
 
-        </select><label for="selTheme"> Цвета для функций CatWar Script</label><br><br>
-        </div>
-       <div><input class="cs-set" id="kalinnikFunction" type="checkbox"${globals.kalinnikFunction?' checked':''}><label for="kalinnikFunction" title="Включает озвучку игровой песнями инстасамки"> Функция для Калинника <small>(Не включайте это)</small></label></div>
-       <div><input class="cs-set" id="kalinnikFunctionVolume" type="number"${globals.kalinnikFunctionVolume?' checked':''} style="width: 55px;" step="0.1" max="1" min="0"> <label for="kalinnikFunctionVolume"> Громкость функции для Калинника</label></div>
+       <a target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSdXz5vKVU1Pk3U1BAAQTjq-LFYw0WX3-kkC_KUcReaNMt5E-Q/viewform">Заполнить форму</a>
+       <table><tr><td><small><i><p>Последнее обновление: </p></i></small></td><td><small><i><span id="lastUpdateDate">k</span></i></small></div></td></tr></table>
+    </div>
 
+</div><div id="trFour">
+    <div id="sbTemplates"><div class="setHead" id="templatesHead"><p>Шаблоны</p></div>
+    <table id="templateTable"><tr><td colspan="3">Отображать шаблоны</td></tr>
+    <tr><td><label for="textTemplates">Сообщения</label></td>
+    <td><label for="ttChat">Чаты</label></td>
+    <td><label for="bloglentTextTemplates">Блоги и лента</label></td></tr>
+    <tr><td><input class="cs-set" id="textTemplates" type="checkbox"${globals.textTemplates?' checked':''}></td>
+    <td><input class="cs-set" id="ttChat" type="checkbox"${globals.ttChat?' checked':''}></td>
+    <td><input class="cs-set" id="bloglentTextTemplates" type="checkbox"${globals.bloglentTextTemplates?' checked':''}></td></tr>
+
+    <tr><td colspan="3">Изначально сворачивать</td></tr>
+    <tr><td><label for="textTemplates">Сообщения</label></td>
+    <td><label for="ttChat">Чаты</label></td>
+    <td><label for="bloglentTextTemplates">Блоги и лента</label></td></tr>
+    <tr><td><input class="cs-set" id="toggleTT" type="checkbox"${globals.toggleTT?' checked':''}></td>
+    <td><input class="cs-set" id="toggleTTChat" type="checkbox"${globals.toggleTTChat?' checked':''}></td>
+    <td><input class="cs-set" id="toggleTTBlog" type="checkbox"${globals.toggleTTBlog?' checked':''}></td></tr></table>
+
+
+    <table id="replaceTable"><tr><td colspan="2">Вставлять название шаблона в заголовок</td></tr>
+    <tr><td>Сообщения</td>
+    <td>Блоги и лента</td></tr>
+    <tr><td><input class="cs-set" id="ttReplaceTheme" type="checkbox"${globals.ttReplaceTheme?' checked':''}></td>
+    <td><input class="cs-set" id="ttReplaceThemeB" type="checkbox"${globals.ttReplaceThemeB?' checked':''}></td></tr></table>
+    </div>
+    <div id="sbOthers"><div class="setHead" id="othersHead"><p>Прочее</p></div>
+         <div><input class="cs-set" id="nightLagsWarning" type="checkbox"${globals.nightLagsWarning?' checked':''}><label for="nightLagsWarning">Предупреждение о соблюдении осторожности на водах и лазательных локациях в период с 03:00 по 04:00 по МСК</label></div>
+         <div><input class="cs-set" id="hideWoundWarning" type="checkbox"${globals.hideWoundWarning?' checked':''}><label for="hideWoundWarning">Убрать предупреждение "Вы ранены" со всех страниц сайта</label></div>
+         <div><input class="cs-set" id="kalinnikFunction" type="checkbox"${globals.kalinnikFunction?' checked':''}><label for="kalinnikFunction" title="Включает озвучку в Игровой с песнями инстасамки">Функция для Калинника<br><small>!!! Не включайте это</small></label></div>
+         <div><input class="cs-set" id="kalinnikFunctionVolume" type="number"${globals.kalinnikFunctionVolume?' checked':''} style="width: 55px;" step="0.1" max="1" min="0"> <label for="kalinnikFunctionVolume"> Громкость функции для Калинника</label></div>
+    </div>
+
+</div><div id="trFive">
+    <div id="sbGame"><div class="setHead" id="gameHead"><p>Игровая</p></div>
+       <div><input class="cs-set" id="showButterflyBots" type="checkbox"${globals.showButterflyBots?' checked':''}><label for="showButterflyBots">Выделять бота-бабочку в Игровой</label></div>
+       <div><input class="cs-set" id="darkCatTooltip" type="checkbox"${globals.darkCatTooltip?' checked':''}><label for="darkCatTooltip">Тёмное окошко при наведении на персонажа в Игровой</label></div>
+       <div><input class="cs-set" id="brightGameField" type="checkbox"${globals.brightGameField?' checked':''}><label for="brightGameField">Не затемнять поле Игровой</label></div>
+
+       <div><input class="cs-set" id="setka" type="checkbox"${globals.setka?' checked':''}><label for="setka">Включить сетку</label></div>
+       <div><input class="cs-set" name="cageGridVar" id="cageGrid" type="radio"${globals.cageGrid?' checked':''}><label for="cageGrid">Стандартная сетка</label></div>
+       <div><input class="cs-set" name="cageGridVar" id="cageGridV" type="radio"${globals.cageGridV?' checked':''}><label for="cageGridV">Сетка как в Варомоде</label></div>
+
+       <div><input class="cs-set" id="cgColor" type="color"${globals.cgColor?' checked':''} style="width: 35px;"><label for="cgColor"> Цвет сетки ячеек локации</label></div>
+       <div><input class="cs-set" id="cgOpacity" type="number"${globals.cgOpacity?' checked':''} style="width: 55px;" step="0.01" max="1" min="0"><label for="cgOpacity"> Прозрачность сетки ячеек локации</label></div>
+       <div id="sbSiren">
+         <div><input class="cs-set" id="cdSDivers" type="checkbox"${globals.cdSDivers?' checked':''}><label for="cdSDivers">Выделять ныряющих в Игровой</label></div>
+         <div><input class="cs-set" id="diverSiren" type="checkbox"${globals.diverSiren?' checked':''}><label for="diverSiren">Звуковое уведомление при определённом сне на водах</label></div>
+         <div><input class="cs-set" id="diverSirenVol" type="number"${globals.diverSirenVol?' checked':''} style="width: 55px;" step="0.1" max="1" min="0"> <label for="diverSirenVol">Громкость уведомления</label></div>
+         <div><input class="cs-set" id="diverSirenMinutes" type="number"${globals.diverSirenMinutes?' checked':''} style="width: 40px;" step="5" max="40" min="5"> <label for="diverSirenMinutes">При каком сне начинает срабатывать</label></div>
+         <input class="cs-set" id="dsX" type="number"${globals.dsX?' checked':''} style="width: 55px;" step="5"> <input class="cs-set" id="dsY" type="number"${globals.dsY?' checked':''} style="width: 55px;" step="5"><label for="dsY"> Расположение окошка</label>
+         <div><input class="cs-set" id="diverSirenHref" type="text"${globals.diverSirenHref?' checked':''} style="width: 350px;" step="5"> <label for="diverSirenHref">Ссылка на звук сирены</label></div><button id="testSiren">Тест</button>
+       </div>
+       <div><input class="cs-set" id="ahbHistory" type="checkbox"${globals.ahbHistory?' checked':''}><label for="ahbHistory">Автоматически сворачивать Историю</label></div>
+       <div><input class="cs-set" id="ahbParameter" type="checkbox"${globals.ahbParameter?' checked':''}><label for="ahbParameter">Автоматически сворачивать Параметры и навыки</label></div>
+       <div><input class="cs-set" id="ahbRelatives" type="checkbox"${globals.ahbRelatives?' checked':''}><label for="ahbRelatives">Автоматически сворачивать Родственные связи</label></div>
+       <div><input class="cs-set" id="smellTimer" type="checkbox"${globals.smellTimer?' checked':''}><label for="smellTimer">Таймер нюха</label></div>
+       <div><input class="cs-set" id="smellTimerVol" type="number"${globals.smellTimerVol?' checked':''} style="width: 55px;" step="0.1" max="1" min="0"> <label for="smellTimerVol">Громкость таймера нюха</label></div>
+       <div><input class="cs-set" id="smellTimerHref" type="text"${globals.smellTimerHref?' checked':''} style="width: 350px;" step="5"> <label for="smellTimerHref">Ссылка на звук таймера нюха</label></div>
+       <div><input class="cs-set" id="newLS" type="checkbox"${globals.newLS?' checked':''}><label for="newLS">Уведомлять о новых личных сообщениях</label></div>
+       <div><input class="cs-set" id="newLSVol" type="number"${globals.newLSVol?' checked':''} style="width: 55px;" step="0.1" max="1" min="0"> <label for="newLSVol">Громкость уведомления о новых личных сообщениях</label></div>
+       <div><input class="cs-set" id="newChat" type="checkbox"${globals.newChat?' checked':''}><label for="newChat">Уведомлять о новых сообщениях в чате</label></div>
+       <div><input class="cs-set" id="newChatVol" type="number"${globals.newChatVol?' checked':''} style="width: 55px;" step="0.1" max="1" min="0"> <label for="newChatVol">Громкость уведомления о новых сообщениях в чате</label></div>
+       <div><input class="cs-set" id="raiseNote" type="checkbox"${globals.raiseNote?' checked':''}><label for="raiseNote">Уведомлять, если тебя подняли в Игровой</label></div>
+       <div><input class="cs-set" id="raiseNoteVol" type="number"${globals.raiseNoteVol?' checked':''} style="width: 55px;" step="0.1" max="1" min="0"> <label for="raiseNoteVol">Громкость уведомления о поднятии в Игровой</label></div>
+    </div>
+
+</div><div id="trSix">
+    <div id="sbStyles"><div class="setHead" id="stylesHead"><p>Кастомизация</p></div>
+       <br><div>
+         <select class="cs-set" id="selTheme">
+           <option value="0">Основная CatWar Script</option>
+           <option value="1">Вторая CatWar Script</option>
+           <option value="2">Третья CatWar Script</option>
+         </select><label for="selTheme"> Палитра блоков CatWar Script</label><br><br>
+       </div>
+       <div><a target="_blank" href="https://catwar.su/scriptcustomcw3">Ссылка на конструктор игровой</a></div>
+       <div><input class="cs-set" id="playerCustom" type="checkbox"${globals.playerCustom?' checked':''}><label for="playerCustom">Игровая из конструктора игровой</label></div><br>
+
+       <div id="sbDefects">
+         <table id="defectTable">
+           <tr>
+             <td>Раны</td>
+             <td>Отравление</td>
+             <td>Ушибы</td>
+           </tr><tr>
+             <td><input class="cs-set" id="cdCRani" type="color"${globals.cdCRani?' checked':''} style="width: 35px;"></td>
+             <td><input class="cs-set" id="cdCPoison" type="color"${globals.cdCPoison?' checked':''} style="width: 35px;"></td>
+             <td><input class="cs-set" id="cdCTrauma" type="color"${globals.cdCTrauma?' checked':''} style="width: 35px;"></td>
+           </tr><tr>
+             <td><input class="cs-set" id="cdSRani1" type="checkbox"${globals.cdSRani1?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
+             <td><input class="cs-set" id="cdSPoison1" type="checkbox"${globals.cdSPoison1?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
+             <td><input class="cs-set" id="cdSTrauma1" type="checkbox"${globals.cdSTrauma1?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
+           </tr><tr>
+             <td><input class="cs-set" id="cdSDrown2" type="checkbox"${globals.cdSDrown2?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
+             <td><input class="cs-set" id="cdSPoison1" type="checkbox"${globals.cdSPoison2?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
+             <td><input class="cs-set" id="cdSGryaz2" type="checkbox"${globals.cdSGryaz2?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
+           </tr><tr>
+             <td><input class="cs-set" id="cdSRani3" type="checkbox"${globals.cdSRani3?' checked':''}><input class="cs-set" id="cdSRani3B" type="checkbox"${globals.cdSRani3B?' checked':''}></td>
+             <td><input class="cs-set" id="cdSPoison3" type="checkbox"${globals.cdSPoison3?' checked':''}><input class="cs-set" id="cdSPoison3B" type="checkbox"${globals.cdSPoison3B?' checked':''}></td>
+             <td><input class="cs-set" id="cdSTrauma3" type="checkbox"${globals.cdSTrauma3?' checked':''}><input class="cs-set" id="cdSTrauma3B" type="checkbox"${globals.cdSTrauma3B?' checked':''}></td>
+           </tr><tr>
+             <td><input class="cs-set" id="cdSRani4" type="checkbox"${globals.cdSRani4?' checked':''}><input class="cs-set" id="cdSRani4B" type="checkbox"${globals.cdSRani4B?' checked':''}></td>
+             <td><input class="cs-set" id="cdSPoison4" type="checkbox"${globals.cdSPoison4?' checked':''}><input class="cs-set" id="cdSPoison4B" type="checkbox"${globals.cdSPoison4B?' checked':''}></td>
+             <td><input class="cs-set" id="cdSTrauma4" type="checkbox"${globals.cdSTrauma4?' checked':''}><input class="cs-set" id="cdSTrauma4B" type="checkbox"${globals.cdSTrauma4B?' checked':''}></td>
+           </tr><tr>
+             <td>Переломы</td>
+             <td>Кашель</td>
+             <td>Грязь</td>
+           </tr><tr>
+             <td><input class="cs-set" id="cdCDrown" type="color"${globals.cdCDrown?' checked':''} style="width: 35px;"></td>
+             <td><input class="cs-set" id="cdCCough" type="color"${globals.cdCCough?' checked':''} style="width: 35px;"></td>
+             <td><input class="cs-set" id="cdCGryaz" type="color"${globals.cdCGryaz?' checked':''} style="width: 35px;"></td>
+           </tr><tr>
+             <td><input class="cs-set" id="cdSDrown1" type="checkbox"${globals.cdSDrown1?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
+             <td><input class="cs-set" id="cdSCough" type="checkbox"${globals.cdSCough?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
+             <td><input class="cs-set" id="cdSGryaz1" type="checkbox"${globals.cdSGryaz1?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
+           </tr><tr>
+             <td><input class="cs-set" id="cdSDrown2" type="checkbox"${globals.cdSDrown2?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
+             <td>Подстилки</td>
+             <td><input class="cs-set" id="cdSGryaz2" type="checkbox"${globals.cdSGryaz2?' checked':''}><input class="cs-set" type="checkbox" disabled checked="true"></td>
+           </tr><tr>
+             <td><input class="cs-set" id="cdSDrown3" type="checkbox"${globals.cdSDrown3?' checked':''}><input class="cs-set" id="cdSDrown3B" type="checkbox"${globals.cdSDrown3B?' checked':''}></td>
+             <td><input class="cs-set" id="cdCPodstilki" type="color"${globals.cdCPodstilki?' checked':''} style="width: 35px;"></td>
+             <td><input class="cs-set" id="cdSGryaz3" type="checkbox"${globals.cdSGryaz3?' checked':''}><input class="cs-set" id="cdSGryaz3B" type="checkbox"${globals.cdSGryaz3B?' checked':''}></td>
+           </tr><tr>
+             <td><input class="cs-set" id="cdSDrown4" type="checkbox"${globals.cdSDrown4?' checked':''}><input class="cs-set" id="cdSDrown4B" type="checkbox"${globals.cdSDrown4B?' checked':''}></td>
+             <td><input class="cs-set" id="cdSPodstilki" type="checkbox"${globals.cdSPodstilki?' checked':''}></td>
+             <td><input class="cs-set" id="cdSGryaz4" type="checkbox"${globals.cdSGryaz4?' checked':''}><input class="cs-set" id="cdSGryaz4B" type="checkbox"${globals.cdSGryaz4B?' checked':''}></td>
+           </tr>
+         </table><br>
+         <div><input class="cs-set" id="customDefects" type="checkbox"${globals.customDefects?' checked':''}><label for="customDefects">Кастомизация выделения больных</label></div>
+         <div><input class="cs-set" id="cdSColors" type="checkbox"${globals.cdSColors?' checked':''}><label for="cdSColors">Выделять клетки с больными игроками</label></div>
+         <table><tr><td><div><input class="cs-set" id="cdSRamkiFalse" type="radio" name="iscdsramki"${!globals.cdSRamki?' checked':''} value="false"><label for="cdSRamkiFalse">Выделять всю клетку</label></div></td>
+         <td><div><input class="cs-set" id="cdSRamkiTrue" type="radio" name="iscdsramki"${globals.cdSRamki?' checked':''} value="true"><label for="cdSRamkiTrue">Выделять рамку клетки</label></div></td></tr></table>
+         <div><input class="cs-set" id="cdSIcon" type="checkbox"${globals.cdSIcon?' checked':''}><label for="cdSIcon">Показывать иконки дефектов</label></div>
+         <div><input class="cs-set" id="cdOpacity" type="number"${globals.cdOpacity?' checked':''} style="width: 45px;" step="0.05" max="1" min="0"> <label for="cdOpacity">Прозрачность выделенной клетки</label></div>
+       </div><br>
+
+       <div id="sbItems">
+         <table id="itemTable">
+           <tr>
+             <td>Травы</td>
+             <td>Мох</td>
+           </tr><tr>
+             <td><input class="cs-set" id="ciCHerb" type="color"${globals.ciCHerb?' checked':''} style="width: 35px;"></td>
+             <td><input class="cs-set" id="ciCMoss" type="color"${globals.ciCMoss?' checked':''} style="width: 35px;"></td>
+           </tr><tr>
+             <td><input class="cs-set" id="ciSHerb" type="checkbox"${globals.ciSHerb?' checked':''}>
+             <td><input class="cs-set" id="ciSMoss" type="checkbox"${globals.ciSMoss?' checked':''}>
+           </tr><tr>
+             <td>Паутина</td>
+             <td>Пыль</td>
+           </tr><tr>
+             <td><input class="cs-set" id="ciCWeb" type="color"${globals.ciCWeb?' checked':''} style="width: 35px;"></td>
+             <td><input class="cs-set" id="ciCDust" type="color"${globals.ciCDust?' checked':''} style="width: 35px;"></td>
+           </tr><tr>
+             <td><input class="cs-set" id="ciSWeb" type="checkbox"${globals.ciSWeb?' checked':''}>
+             <td><input class="cs-set" id="ciSDust" type="checkbox"${globals.ciSDust?' checked':''}>
+           </tr><tr>
+             <td colspan="2">Ветки, вьюнки, костоправы</td>
+           </tr><tr>
+             <td colspan="2"><input class="cs-set" id="ciCStick" type="color"${globals.ciCStick?' checked':''} style="width: 35px;"></td>
+           </tr><tr>
+             <td colspan="2"><input class="cs-set" id="ciSStick" type="checkbox"${globals.ciSStick?' checked':''}>
+           </tr><tr>
+             <td colspan="2">Травящие предметы</td>
+           </tr><tr>
+             <td colspan="2"><input class="cs-set" id="ciCMusor" type="color"${globals.ciCMusor?' checked':''} style="width: 35px;"></td>
+           </tr><tr>
+             <td colspan="2"><input class="cs-set" id="ciSMusor" type="checkbox"${globals.ciSMusor?' checked':''}>
+           </tr>
+         </table><br>
+         <div><input class="cs-set" id="ciOpacity" type="number"${globals.ciOpacity?' checked':''} style="width: 45px;" step="0.05" max="1" min="0"> <label for="ciOpacity">Прозрачность выделения клетки</label></div>
+       </div>
+    </div>
+</div>
        </div>
      </div>
      <div id="div2">
@@ -771,7 +949,7 @@ function sett() {
      <div id="div3">
      </div>
     </div>
-        </div><br></div><br></div><br>
+        </div></div></div>
         </div></div></div>
         </td></tr></tbody></table></td></tr></tbody></table>`
 
@@ -804,6 +982,11 @@ $(document).ready(function() {
   $('#dsX').val(globals.dsX);
   $('#dsY').val(globals.dsY);
   $('#kalinnikFunctionVolume').val(globals.kalinnikFunctionVolume);
+  $('#smellTimerVol').val(globals.smellTimerVol);
+  $('#smellTimerHref').val(globals.smellTimerHref);
+  $('#newLSVol').val(globals.newLSVol);
+  $('#newChatVol').val(globals.newChatVol);
+  $('#raiseNoteVol').val(globals.raiseNoteVol);
   if (globals.tmVariant !== null) {
     $('#tmVariant').val(globals.tmVariant);
   }
@@ -1339,7 +1522,7 @@ function cw3() {
     });
   }
 
-  if (globals.autoHidingBlocks) {
+
     $(document).ready(function() {
     if (globals.ahbHistory) {
       $('div#history_block').hide();
@@ -1351,7 +1534,7 @@ function cw3() {
       $('div#relatives_block').hide();
     }
     });
-  }
+
 
   if (globals.cageGrid) {
     let variable = "";
@@ -2369,8 +2552,8 @@ function cw3() {
         color: ${globals.cgHisFCol} !important;}
       .ui-icon-gripsmall-diagonal-se {
         position: absolute;
-        top: 1px;
-        left: 1px;}
+        bottom: 1px;
+        right: 1px; }
       div#clockContainer {
         position: absolute;
         top: ${globals.cgClockY}px;
@@ -3109,7 +3292,7 @@ function cw3() {
       </svg>`
       let tmHtml = `
        <div id="tmBlock">
-        <div id="tmHeader"><table><tbody><tr><td><p>Минное поле V2</p></td><td><span id="tmHeaderPlusMinus">${tmSvgPlus}${tmSvgMinus}</span></td></tr></tbody></table></div>
+        <div id="tmHeader"><table><tbody><tr><td><p>Минное поле v2</p></td><td><span id="tmHeaderPlusMinus">${tmSvgPlus}${tmSvgMinus}</span></td></tr></tbody></table></div>
        </div>`
 
       if (1==1) {
@@ -3346,8 +3529,8 @@ function cw3() {
       color: var(--cwsc-txt-1);
       border: 3px solid var(--cwsc-brdr-1) !important;
       border-radius: 10px;
-      height: 620px;
-      z-index: 500;}
+      height: 630px;
+      z-index: 500; }
 
       .tmTable .tmThingSafe { background-color: var(--tm-safe); }
       .tmTable .tmThingUnsafe { background-color: var(--tm-unsafe); }
@@ -3449,16 +3632,22 @@ function cw3() {
       color: var(--cwsc-txt-4);
       border: 2px solid var(--cwsc-brdr-3);
       border-radius: 3px !important;
-      padding: 0px 9px;
-      margin: 5px 0px; }
+      padding: 0px;
+      width: 36px;
+      text-align: center;
+      margin: 5px 0px;
+      font-size: 13px; }
 
       label.tmFolderLabel {
       background-color: var(--cwsc-inpt-1);
       color: var(--cwsc-txt-4);
       border: 2px solid var(--cwsc-brdr-3);
       border-radius: 3px !important;
-      padding: 0px 24px;
-      margin: 5px 0px; }
+      padding: 0px;
+      width: 58px;
+      text-align: center;
+      margin: 5px 0px;
+      font-size: 13px; }
 
       div#blockField {
       display: flex;
@@ -3496,7 +3685,7 @@ function cw3() {
       color: var(--cwsc-txt-1);
       border: 3px solid var(--cwsc-brdr-1) !important;
       border-radius: 10px;
-      height: 510px;
+      height: 520px;
       z-index: 500; }
 
       .tmTable .tmThingSafe { background-color: var(--tm-safe); }
@@ -3601,16 +3790,22 @@ function cw3() {
       color: var(--cwsc-txt-4);
       border: 2px solid var(--cwsc-brdr-3);
       border-radius: 3px !important;
-      padding: 0px 9px;
-      margin: 5px 0px; }
+      padding: 0px;
+      width: 36px;
+      text-align: center;
+      margin: 5px 0px;
+      font-size: 13px; }
 
       label.tmFolderLabel {
       background-color: var(--cwsc-inpt-1);
       color: var(--cwsc-txt-4);
       border: 2px solid var(--cwsc-brdr-3);
       border-radius: 3px !important;
-      padding: 0px 24px;
-      margin: 5px 0px; }
+      padding: 0px;
+      width: 58px;
+      text-align: center;
+      margin: 5px 0px;
+      font-size: 13px; }
 
       div#blockField {
       display: flex;
@@ -3650,7 +3845,7 @@ function cw3() {
       border-radius: 10px;
       width: 495px;
       height: 280px;
-      z-index: 500;}
+      z-index: 500; }
 
       .tmTable .tmThingSafe { background-color: var(--tm-safe); }
       .tmTable .tmThingUnsafe { background-color: var(--tm-unsafe); }
@@ -3761,16 +3956,22 @@ function cw3() {
       color: var(--cwsc-txt-4);
       border: 2px solid var(--cwsc-brdr-3);
       border-radius: 3px !important;
-      padding: 0px 9px;
-      margin: 5px 0px; }
+      padding: 0px;
+      width: 36px;
+      text-align: center;
+      margin: 5px 0px;
+      font-size: 13px; }
 
       label.tmFolderLabel {
       background-color: var(--cwsc-inpt-1);
       color: var(--cwsc-txt-4);
       border: 2px solid var(--cwsc-brdr-3);
       border-radius: 3px !important;
-      padding: 0px 24px;
-      margin: 5px 0px; }
+      padding: 0px;
+      width: 58px;
+      text-align: center;
+      margin: 5px 0px;
+      font-size: 13px; }
 
       div#blockField {
       position: absolute;
@@ -4154,6 +4355,60 @@ function all() {
       --desClr1: ${(globals['dsghnClr2'])};
       --desBckgImg1: url(${(globals['dsghnImg'])});
     }
+:root {
+--cwsc-scrl-1: #332f3c !important;
+--cwsc-scrl-2: #8d5353 !important;
+--cwsc-inpt-1: #2e2c31 !important;
+--cwsc-inpt-2: #2e2c31 !important;
+--cwsc-bttn-1: #2e2c31 !important;
+
+--cwsc-bckg-1: #332f3c !important;
+--cwsc-bckg-2: #615b6b !important;
+--cwsc-bckg-3: #858093 !important;
+--cwsc-bckg-4: #a19ca6 !important;
+--cwsc-bckg-5: #1d1b24 !important;
+--cwsc-bckg-6: #DBAEFF !important;
+--cwsc-bckg-7: #6b627150 !important;
+
+--cwsc-brdr-1: #332f3c !important;
+--cwsc-brdr-2: #8d5353 !important;
+--cwsc-brdr-3: #1b1311 !important;
+--cwsc-brdr-4: #0c0b0f15 !important;
+--cwsc-brdr-5: #c9bdb090 !important;
+
+--cwsc-txt-1: #110d18 !important;
+--cwsc-txt-2: #c2bcb8 !important;
+--cwsc-txt-3: #bd5e5e !important;
+--cwsc-txt-4: #bcb7c2 !important;
+--cwsc-txt-5: #a99bbf !important;
+
+--cwsc-fltr-vk: hue-rotate(22deg) contrast(10%) brightness(90%);
+--cwsc-fltr-tg: hue-rotate(37deg) contrast(15%) brightness(88%);
+--cwsc-fltr-bs: hue-rotate(220deg) contrast(12%) brightness(87%);
+
+--tm-safe: rgba(255,255,255,.5);
+--tm-unsafe: rgba(51, 42, 75, .45);
+--tm-location: rgba(255,255,255,1);
+--tm-safe-cage: rgba(247, 255, 236, .25);
+--tm-unsafe-cage: rgba(18, 11, 43, .5);
+--tm-location-cage: rgba(247, 255, 236, .5);
+
+--cwdf-bckg-1: #333;
+--cwdf-brdr-1: #000;
+--cwdf-brdr-2: #ff0;
+--cwdf-txt-1: #fff;
+--cwdf-txt-2: #000; }
+       </style>`
+      $('head').append(cssDlyaCWScripta);
+    }
+    if (globals['selTheme'] == 1) {
+      let cssDlyaCWScripta = `
+       <style id="cssPalette">
+      :root {
+      --desBckg1: ${(globals['dsghnClr'])};
+      --desClr1: ${(globals['dsghnClr2'])};
+      --desBckgImg1: url(${(globals['dsghnImg'])});
+    }
       :root {
       --cwsc-scrl-1: #3F2D29;
       --cwsc-scrl-2: #AD7B3C;
@@ -4200,7 +4455,7 @@ function all() {
        </style>`
       $('head').append(cssDlyaCWScripta);
     }
-    if (globals['selTheme'] == 1) {
+    if (globals['selTheme'] == 2) {
       let cssDlyaCWScripta = `
        <style id="cssPalette">
 
@@ -4831,7 +5086,7 @@ function chat() {
             let okButton = $('<button type="button" id="templateBtnOK" class="templateBtns">OK</button>').click(function() {
               let templateName = inputField.val();
               if (templateName) {
-                let currentContent = $('#mess').html(); // Изменяем на получение содержимого #mess
+                let currentContent = $('#mess').html();
                 let newTemplate = {
                   name: templateName,
                   content: currentContent
@@ -4871,7 +5126,7 @@ function chat() {
             let templateC = templatesC[templateIndex];
             if (templateC) {
               let templateContent = templateC.content;
-              $('#mess').html(templateContent); // Устанавливаем содержимое #mess
+              $('#mess').html(templateContent);
               let saveButton = $('#templateBtnSaveChanges');
               if (saveButton.length === 0) {
                 saveButton = $('<button id="templateBtnSaveChanges">Сохранить шаблон</button><br><br>');
@@ -4879,11 +5134,11 @@ function chat() {
               }
               saveButton.off('click').click(function(e) {
                 e.preventDefault();
-                let editedContent = $('#mess').html(); // Получаем содержимое #mess
+                let editedContent = $('#mess').html();
                 templatesC[templateIndex].content = editedContent;
                 localStorage.setItem('templatesC', JSON.stringify(templatesC));
                 renderTemplates();
-                $('#mess').html(''); // Очищаем #mess
+                $('#mess').html('');
                 $('#templateBtnSaveChanges').hide();
               });
             }
@@ -4893,7 +5148,7 @@ function chat() {
             let templateIndex = $(this).data('index');
             let templateC = templatesC[templateIndex];
             if (templateC) {
-              $('#mess').html(templateC.content); // Устанавливаем содержимое #mess
+              $('#mess').html(templateC.content);
             }
           });
           renderTemplates();
@@ -5049,144 +5304,110 @@ function custom() {
   $('body').append(html);
   let prikol = `
   <div id="compactTool">
-    <span id="ctHeader">Настройка компактной игровой</span>
+  <div id="ctHeader">Настройка компактной игровой</div>
+  <div id="ctFolderBtns"><span id="folHandle1">1</span><span id="folHandle2">2</span><span id="folHandle3">3</span></div>
     <div id="ctInputs">
+      <div id="folder1" class="folder active">
       <table>
         <tr>
           <td>
             Блок
-          </td>
-          <td>
+          </td><td>
             Фоновый цвет
-          </td>
-          <td>
+          </td><td>
             Позиция (гор)
-          </td>
-          <td>
+          </td><td>
             Позиция (вер)
-          </td>
-          <td>
+          </td><td>
             Ширина
-          </td>
-          <td>
+          </td><td>
             Высота
-          </td>
-          <td>
+          </td><td>
             Цвет текста
           </td>
         </tr>
         <tr>
           <td>
             История
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgHisCol" type="color"${globals.cgHisCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgHisX" type="number"${globals.cgHisX?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgHisY" type="number"${globals.cgHisY?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgHisWid" type="number"${globals.cgHisWid?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgHisHei" type="number"${globals.cgHisHei?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgHisFCol" type="color"${globals.cgHisFCol?' checked':''} style="width: 35px;">
           </td>
         </tr>
         <tr>
           <td>
             Параметры
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgParCol" type="color"${globals.cgParCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgParX" type="number"${globals.cgParX?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgParY" type="number"${globals.cgParY?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgParWid" type="number"${globals.cgParWid?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgParHei" type="number"${globals.cgParHei?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgParFCol" type="color"${globals.cgParFCol?' checked':''} style="width: 35px;">
           </td>
         </tr>
         <tr>
           <td>
             Чат
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgChatCol" type="color"${globals.cgChatCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgChatX" type="number"${globals.cgChatX?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgChatY" type="number"${globals.cgChatY?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgChatWid" type="number"${globals.cgChatWid?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgChatHei" type="number"${globals.cgChatHei?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgChatFCol" type="color"${globals.cgChatFCol?' checked':''} style="width: 35px;">
           </td>
         </tr>
         <tr>
           <td>
             Действия
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgDeysCol" type="color"${globals.cgDeysCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgDeysX" type="number"${globals.cgDeysX?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgDeysY" type="number"${globals.cgDeysY?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgDeysWid" type="number"${globals.cgDeysWid?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgDeysHei" type="number"${globals.cgDeysHei?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgDeysFCol" type="color"${globals.cgDeysFCol?' checked':''} style="width: 35px;">
           </td>
         </tr>
         <tr>
           <td>
             РС
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgRSCol" type="color"${globals.cgRSCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgRSX" type="number"${globals.cgRSX?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgRSY" type="number"${globals.cgRSY?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgRSWid" type="number"${globals.cgRSWid?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgRSHei" type="number"${globals.cgRSHei?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgRSFCol" type="color"${globals.cgRSFCol?' checked':''} style="width: 35px;">
           </td>
         </tr>
@@ -5196,20 +5417,15 @@ function custom() {
           </td>
           <td>
           <input class="cs-set" id="cgRotCol" type="color"${globals.cgRotCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgRotX" type="number"${globals.cgRotX?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgRotY" type="number"${globals.cgRotY?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgRotWid" type="number"${globals.cgRotWid?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgRotHei" type="number"${globals.cgRotHei?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgRotFCol" type="color"${globals.cgRotFCol?' checked':''} style="width: 35px;">
           </td>
         </tr>
@@ -5219,20 +5435,15 @@ function custom() {
           </td>
           <td>
           <input class="cs-set" id="cgOCLCol" type="color"${globals.cgOCLCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgOCLX" type="number"${globals.cgOCLX?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgOCLY" type="number"${globals.cgOCLY?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgOCLWid" type="number"${globals.cgOCLWid?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgOCLHei" type="number"${globals.cgOCLHei?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgOCLFCol" type="color"${globals.cgOCLFCol?' checked':''} style="width: 35px;">
           </td>
         </tr>
@@ -5242,20 +5453,15 @@ function custom() {
           </td>
           <td>
           <input class="cs-set" id="cgSmallCol" type="color"${globals.cgSmallCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgSmallX" type="number"${globals.cgSmallX?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgSmallY" type="number"${globals.cgSmallY?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgSmallWid" type="number"${globals.cgSmallWid?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgSmallHei" type="number"${globals.cgSmallHei?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgSmallFCol" type="color"${globals.cgSmallFCol?' checked':''} style="width: 35px;">
           </td>
         </tr>
@@ -5265,20 +5471,15 @@ function custom() {
           </td>
           <td>
           <input class="cs-set" id="cgTBCol" type="color"${globals.cgTBCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgTBX" type="number"${globals.cgTBX?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgTBY" type="number"${globals.cgTBY?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgTBWid" type="number"${globals.cgTBWid?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgTBHei" type="number"${globals.cgTBHei?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgTBFCol" type="color"${globals.cgTBFCol?' checked':''} style="width: 35px;">
           </td>
         </tr>
@@ -5288,20 +5489,15 @@ function custom() {
           </td>
           <td>
           <input class="cs-set" id="cgClockCol" type="color"${globals.cgClockCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgClockX" type="number"${globals.cgClockX?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgClockY" type="number"${globals.cgClockY?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgClockWid" type="number"${globals.cgClockWid?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgClockHei" type="number"${globals.cgClockHei?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgClockFCol" type="color"${globals.cgClockFCol?' checked':''} style="width: 35px;">
           </td>
         </tr>
@@ -5311,109 +5507,122 @@ function custom() {
           </td>
           <td>
           <input class="cs-set" id="cgLocCol" type="color"${globals.cgLocCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgLocX" type="number"${globals.cgLocX?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgLocY" type="number"${globals.cgLocY?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgLocWid" type="number"${globals.cgLocWid?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgLocHei" type="number"${globals.cgLocHei?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgLocFCol" type="color"${globals.cgLocFCol?' checked':''} style="width: 35px;">
           </td>
         </tr>
         <tr>
           <td>
+            ТОС и котовремя
+          </td>
+          <td>
+          <input class="cs-set" id="cgTOSCol" type="color"${globals.cgTOSCol?' checked':''} style="width: 35px;">
+          </td>
+          <td>
+          <input class="cs-set" id="cgTOSX" type="number"${globals.cgTOSX?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
+          </td><td>
+          <input class="cs-set" id="cgTOSY" type="number"${globals.cgTOSY?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
+          </td><td>
+          <input class="cs-set" id="cgTOSWid" type="number"${globals.cgTOSWid?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
+          </td><td>
+          <input class="cs-set" id="cgTOSHei" type="number"${globals.cgTOSHei?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
+          </td><td>
+          <input class="cs-set" id="cgTOSFCol" type="color"${globals.cgTOSFCol?' checked':''} style="width: 35px;">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Небо
+          </td>
+          <td>
+          <input class="cs-set" id="cgSkyCol" type="color"${globals.cgSkyCol?' checked':''} style="width: 35px;" disabled>
+          </td><td>
+          <input class="cs-set" id="cgSkyX" type="number"${globals.cgSkyX?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
+          </td><td>
+          <input class="cs-set" id="cgSkyY" type="number"${globals.cgSkyY?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
+          </td><td>
+          <input class="cs-set" id="cgSkyWid" type="number"${globals.cgSkyWid?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
+          </td><td>
+          <input class="cs-set" id="cgSkyHei" type="number"${globals.cgSkyHei?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
+          </td><td>
+          <input class="cs-set" id="cgSkyFCol" type="color"${globals.cgSkyFCol?' checked':''} style="width: 35px;" disabled>
+          </td>
+        </tr>
+        </table>
+      </div>
+      <div id="folder2" class="folder">
+        <table>
+        <tr>
+          <td>
             Вся страница
-          </td>
-          <td>
+          </td><td>
           <input class="cs-set" id="cgBodyCol" type="color"${globals.cgBodyCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
             Размер шрифта >
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgFontSize" type="number"${globals.cgFontSize?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
             Шрифт у "Мой кот" >
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgSmallFW" type="number"${globals.cgSmallFW?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
             😨
           </td>
         </tr>
         <tr>
           <td>
             Плюсик параметров
-          </td>
-          <td>
+          </td><td>
             ь
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgParAlertX" type="number"${globals.cgParAlertX?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgParAlertY" type="number"${globals.cgParAlertY?' checked':''} style="width: 45px;" step="1" max="15000" min="0">
-          </td>
-          <td>
+          </td><td>
             Цвет плюсика >
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgParAlertFCol" type="color"${globals.cgParAlertFCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
             ъ
           </td>
         </tr>
         <tr>
           <td>
             Обводка блоков
-          </td>
-          <td>
+          </td><td>
             Ширина
-          </td>
-          <td>
+          </td><td>
             Цвет
-          </td>
-          <td>
+          </td><td>
             Тип
-          </td>
-          <td>
+          </td><td>
             Обводка у ТБ
-          </td>
-          <td>
+          </td><td>
             Фон упом.
-          </td>
-          <td>
+          </td><td>
             Текст упом.
           </td>
         </tr>
         <tr>
           <td>
             <input class="cs-set" id="cgBorders" type="checkbox"${globals.cgBorders?' checked':''}>
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgBorderWid" type="number"${globals.cgBorderWid?' checked':''} style="width: 45px;" step="0.5" max="15" min="0">
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgBorderCol" type="color"${globals.cgBorderCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgBorderType" type="text"${globals.cgBorderType?' checked':''} style="width: 45px;" step="0.5" max="15" min="0">
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgTbBorder" type="checkbox"${globals.cgTbBorder?' checked':''}>
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgYouBG" type="color"${globals.cgYouBG?' checked':''} style="width: 35px;">
           </td>
           <td>
@@ -5426,80 +5635,65 @@ function custom() {
           </td>
           <td>
             <input class="cs-set" id="cgInputCol" type="color"${globals.cgInputCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
             Текст input'ов >
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgInputFCol" type="color"${globals.cgInputFCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
             Скруглённый радиус
-          </td>
-          <td>
+          </td><td>
             У локации
-          </td>
-          <td>
+          </td><td>
             У ТБ
           </td>
         </tr>
         <tr>
           <td>
             Радиус >
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgBorderRad" type="number"${globals.cgBorderRad?' checked':''} style="width: 45px;" step="0.5" max="150" min="0">
-          </td>
-          <td>
+          </td><td>
             Перетаскивать поле? >
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgIsFieldFix" type="checkbox"${globals.cgIsFieldFix?' checked':''}>
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgIsBorderRad" type="checkbox"${globals.cgIsBorderRad?' checked':''}>
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgIsLocBorderRad" type="checkbox"${globals.cgIsLocBorderRad?' checked':''}>
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgIsTBBorderRad" type="checkbox"${globals.cgIsTBBorderRad?' checked':''}>
           </td>
         </tr>
                 <tr>
           <td>
             Поменять скроллы >
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgDeleteScrolls" type="checkbox"${globals.cgDeleteScrolls?' checked':''}>
-          </td>
-          <td>
+          </td><td>
             Ползунок чата
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgChatSliderCol" type="color"${globals.cgChatSliderCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
             Бордер ползунка
-          </td>
-          <td>
+          </td><td>
             <input class="cs-set" id="cgChatSliderBorderCol" type="color"${globals.cgChatSliderBorderCol?' checked':''} style="width: 35px;">
-          </td>
-          <td>
+          </td><td>
             15.08
           </td>
         </tr>
       </table>
+      </div>
+      <div id="folder3" class="folder">
       <input class="cs-set" id="cgDelParH2" type="checkbox"${globals.cgDelParH2?' checked':''}><label for="cgDelParH2">Убрать h2 у параметров</label><br>
       <input class="cs-set" id="cgDelHisH2" type="checkbox"${globals.cgDelHisH2?' checked':''}><label for="cgDelHisH2">Убрать h2 у истории</label><br>
       <input class="cs-set" id="cgDelRSH2" type="checkbox"${globals.cgDelRSH2?' checked':''}><label for="cgDelRSH2">Убрать h2 у РС</label><br>
       <input class="cs-set" id="cgInfoH2DelMargins" type="checkbox"${globals.cgInfoH2DelMargins?' checked':''}><label for="cgInfoH2DelMargins">Убрать отступы сверху/снизу у h2 блоков информации</label><br>
       <input class="cs-set" id="cgInfoH2FontSize" type="number"${globals.cgInfoH2FontSize?' checked':''} style="width: 45px;" step="1" max="150" min="0"><label for="cgInfoH2FontSize">Размер шрифта заголовков</label><br>
       <input class="cs-set" id="cgSeparateLocation" type="checkbox"${globals.cgSeparateLocation?' checked':''}><label for="cgSeparateLocation">Отоброжать блок с локацией отдельно</label><br>
-
       <label for="inputImport">Импорт настроек </label><input type="text" id="inputImport"><br>
       <button id="inputExport">Экспорт настроек</button>
       <input id="outputExport">
+      </div>
         </div>
   </div>`
     $('body').append(prikol);
@@ -5522,6 +5716,21 @@ function custom() {
   $('#cgChatY').val(globals.cgChatY);
   $('#cgChatWid').val(globals.cgChatWid);
   $('#cgChatHei').val(globals.cgChatHei);
+
+  $('#cgTOSCol').val(globals.cgTOSCol);
+  $('#cgTOSFCol').val(globals.cgTOSFCol);
+  $('#cgTOSX').val(globals.cgTOSX);
+  $('#cgTOSY').val(globals.cgTOSY);
+  $('#cgTOSWid').val(globals.cgTOSWid);
+  $('#cgTOSHei').val(globals.cgTOSHei);
+
+  $('#cgSkyCol').val(globals.cgSkyCol);
+  $('#cgSkyFCol').val(globals.cgSkyFCol);
+  $('#cgSkyX').val(globals.cgSkyX);
+  $('#cgSkyY').val(globals.cgSkyY);
+  $('#cgSkyWid').val(globals.cgSkyWid);
+  $('#cgSkyHei').val(globals.cgSkyHei);
+
   $('#cgDeysCol').val(globals.cgDeysCol);
   $('#cgDeysFCol').val(globals.cgDeysFCol);
   $('#cgDeysX').val(globals.cgDeysX);
@@ -5594,6 +5803,8 @@ function custom() {
 
   let css = `
   <style>
+
+  /* АМИНА СЮДА АМИНА СЮДА АМИНА К НОГЕ АМИНА КО МНЕ. */
   div#compactTool table tr td {
     border: 1px solid black;
     height: 22px;
@@ -5608,12 +5819,11 @@ function custom() {
   }
 
 
-  span#ctHeader {
+  div#ctHeader {
     background-color: #ffffff;
     height: 25px;
-    display: grid;
-    justify-content: center;
-    align-content: center;
+    text-align: center;
+    line-height: 25px;
   }
 
   body {
@@ -5625,13 +5835,23 @@ function custom() {
     top: ${globals.ctTecPosY}px;
     left: ${globals.ctTecPosX}px;
     width: 570px;
-    height: 813px;
+    height: auto;
     font-size: 14px !important;
     background-color: rgba(255, 255, 255, .5);
     font-family: montserrat;
   }
   #mainTable {
 
+  }
+  .folder {
+    display: none;
+  }
+  .folder.active {
+    display: block;
+  }
+  #svg1 {
+    position: absolute;
+    left: 18px;
   }
   body{font-size:14px;font-family:Verdana}a{outline:none;color:#000;text-decoration:underline}a:hover{text-decoration:none;color:#06f}input{background:#ffe}table{border-collapse:collapse}td{vertical-align:top}.d,.e,.f,.d div,.e div,.f div{background-color:transparent;background-repeat:no-repeat;border:none;padding:0;margin:0;position:relative}.e,.e div{width:32px;height:32px}.f,.f div{width:70px;height:70px}#error{cursor:pointer;display:none;width:170px;min-height:50px;border-radius:10px;padding:5px;font-weight:700;background-color:RGBA(241,90,90,.9);color:#000;position:fixed;top:50%;left:.5%;z-index:9999}
   .ui-helper-hidden-accessible{position:absolute!important;clip:rect(1px,1px,1px,1px)}.ui-helper-reset{border:0;outline:0;line-height:1.3;text-decoration:none;font-size:100%;list-style:none;margin:0;padding:0}.ui-helper-clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}.ui-helper-clearfix{display:block}* html .ui-helper-clearfix{height:1%}.ui-helper-zfix{width:100%;height:100%;top:0;left:0;position:absolute;opacity:0;filter:Alpha(Opacity=0)}.ui-state-disabled{cursor:default!important}.ui-icon{display:block;text-indent:-99999px;overflow:hidden;background-repeat:no-repeat;width:16px;height:16px;background-image:url(/cw3/images/ui-icons_d19405_256x240.png)}.ui-widget-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:#5c5c5c url(/cw3/images/ui-bg_flat_50_5c5c5c_40x100.png) 50% 50% repeat-x;opacity:.8;filter:Alpha(Opacity=80)}.ui-widget{font-family:Segoe UI,Arial,sans-serif;font-size:1.1em}.ui-widget .ui-widget{font-size:1em}.ui-widget input,.ui-widget select,.ui-widget textarea,.ui-widget button{font-family:Segoe UI,Arial,sans-serif;font-size:1em}.ui-widget-content{border:1px solid #8e846b;background:#feeebd url(/cw3/images/ui-bg_highlight-soft_100_feeebd_1x100.png) 50% top repeat-x;color:#383838}.ui-widget-content a{color:#383838}.ui-widget-header{border:1px solid #494437;background:#817865 url(/cw3/images/ui-bg_gloss-wave_45_817865_500x100.png) 50% 50% repeat-x;color:#fff;font-weight:700}.ui-state-default,.ui-widget-content .ui-state-default,.ui-widget-header .ui-state-default{border:1px solid #d19405;background:#fece2f url(/cw3/images/ui-bg_gloss-wave_60_fece2f_500x100.png) 50% 50% repeat-x;font-weight:700;color:#4c3000}.ui-state-default a,.ui-state-default a:link,.ui-state-default a:visited{color:#4c3000;text-decoration:none}.ui-state-hover,.ui-widget-content .ui-state-hover,.ui-widget-header .ui-state-hover,.ui-state-focus,.ui-widget-content .ui-state-focus,.ui-widget-header .ui-state-focus{border:1px solid #a45b13;background:#ffdd57 url(/cw3/images/ui-bg_gloss-wave_70_ffdd57_500x100.png) 50% 50% repeat-x;font-weight:700;color:#381f00}.ui-state-hover a,.ui-state-hover a:hover{color:#381f00;text-decoration:none}.ui-state-active,.ui-widget-content .ui-state-active,.ui-widget-header .ui-state-active{border:1px solid #655e4e;background:#fff url(/cw3/images/ui-bg_inset-soft_30_ffffff_1x100.png) 50% 50% repeat-x;font-weight:700;color:#0074c7}.ui-state-active a,.ui-state-active a:link,.ui-state-active a:visited{color:#0074c7;text-decoration:none}.ui-widget:active{outline:none}.ui-state-highlight,.ui-widget-content .ui-state-highlight,.ui-widget-header .ui-state-highlight{border:1px solid #eeb420;background:#fff9e5 url(/cw3/images/ui-bg_gloss-wave_90_fff9e5_500x100.png) 50% top repeat-x;color:#1f1f1f}.ui-state-highlight a,.ui-widget-content .ui-state-highlight a,.ui-widget-header .ui-state-highlight a{color:#1f1f1f}.ui-state-error,.ui-widget-content .ui-state-error,.ui-widget-header .ui-state-error{border:1px solid #ffb73d;background:#d34d17 url(/cw3/images/ui-bg_diagonals-medium_20_d34d17_40x40.png) 50% 50% repeat;color:#fff}.ui-priority-primary,.ui-widget-content .ui-priority-primary,.ui-widget-header .ui-priority-primary{font-weight:700}.ui-priority-secondary,.ui-widget-content .ui-priority-secondary,.ui-widget-header .ui-priority-secondary{opacity:.7;filter:Alpha(Opacity=70);font-weight:400}.ui-state-disabled,.ui-widget-content .ui-state-disabled,.ui-widget-header .ui-state-disabled{opacity:.35;filter:Alpha(Opacity=35);background-image:none}.ui-widget-content .ui-icon{background-image:url(/cw3/images/ui-icons_d19405_256x240.png)}.ui-widget-header .ui-icon{background-image:url(/cw3/images/ui-icons_fadc7a_256x240.png)}.ui-state-default .ui-icon{background-image:url(/cw3/images/ui-icons_3d3d3d_256x240.png)}.ui-state-hover .ui-icon,.ui-state-focus .ui-icon{background-image:url(/cw3/images/ui-icons_bd7b00_256x240.png)}.ui-state-active .ui-icon{background-image:url(/cw3/images/ui-icons_eb990f_256x240.png)}.ui-state-highlight .ui-icon{background-image:url(/cw3/images/ui-icons_ed9f26_256x240.png)}.ui-state-error .ui-icon,.ui-state-error-text .ui-icon{background-image:url(/cw3/images/ui-icons_ffe180_256x240.png)}.ui-icon-carat-1-n{background-position:0 0}.ui-icon-carat-1-ne{background-position:-16px 0}.ui-icon-carat-1-e{background-position:-32px 0}.ui-icon-carat-1-se{background-position:-48px 0}.ui-icon-carat-1-s{background-position:-64px 0}.ui-icon-carat-1-sw{background-position:-80px 0}.ui-icon-carat-1-w{background-position:-96px 0}.ui-icon-carat-1-nw{background-position:-112px 0}.ui-icon-carat-2-n-s{background-position:-128px 0}.ui-icon-carat-2-e-w{background-position:-144px 0}.ui-icon-triangle-1-n{background-position:0 -16px}.ui-icon-triangle-1-ne{background-position:-16px -16px}.ui-icon-triangle-1-e{background-position:-32px -16px}.ui-icon-triangle-1-se{background-position:-48px -16px}.ui-icon-triangle-1-s{background-position:-64px -16px}.ui-icon-triangle-1-sw{background-position:-80px -16px}.ui-icon-triangle-1-w{background-position:-96px -16px}.ui-icon-triangle-1-nw{background-position:-112px -16px}.ui-icon-triangle-2-n-s{background-position:-128px -16px}.ui-icon-triangle-2-e-w{background-position:-144px -16px}.ui-icon-arrow-1-n{background-position:0 -32px}.ui-icon-arrow-1-ne{background-position:-16px -32px}.ui-icon-arrow-1-e{background-position:-32px -32px}.ui-icon-arrow-1-se{background-position:-48px -32px}.ui-icon-arrow-1-s{background-position:-64px -32px}.ui-icon-arrow-1-sw{background-position:-80px -32px}.ui-icon-arrow-1-w{background-position:-96px -32px}.ui-icon-arrow-1-nw{background-position:-112px -32px}.ui-icon-arrow-2-n-s{background-position:-128px -32px}.ui-icon-arrow-2-ne-sw{background-position:-144px -32px}.ui-icon-arrow-2-e-w{background-position:-160px -32px}.ui-icon-arrow-2-se-nw{background-position:-176px -32px}.ui-icon-arrowstop-1-n{background-position:-192px -32px}.ui-icon-arrowstop-1-e{background-position:-208px -32px}.ui-icon-arrowstop-1-s{background-position:-224px -32px}.ui-icon-arrowstop-1-w{background-position:-240px -32px}.ui-icon-arrowthick-1-n{background-position:0 -48px}.ui-icon-arrowthick-1-ne{background-position:-16px -48px}.ui-icon-arrowthick-1-e{background-position:-32px -48px}.ui-icon-arrowthick-1-se{background-position:-48px -48px}.ui-icon-arrowthick-1-s{background-position:-64px -48px}.ui-icon-arrowthick-1-sw{background-position:-80px -48px}.ui-icon-arrowthick-1-w{background-position:-96px -48px}.ui-icon-arrowthick-1-nw{background-position:-112px -48px}.ui-icon-arrowthick-2-n-s{background-position:-128px -48px}.ui-icon-arrowthick-2-ne-sw{background-position:-144px -48px}.ui-icon-arrowthick-2-e-w{background-position:-160px -48px}.ui-icon-arrowthick-2-se-nw{background-position:-176px -48px}.ui-icon-arrowthickstop-1-n{background-position:-192px -48px}.ui-icon-arrowthickstop-1-e{background-position:-208px -48px}.ui-icon-arrowthickstop-1-s{background-position:-224px -48px}.ui-icon-arrowthickstop-1-w{background-position:-240px -48px}.ui-icon-arrowreturnthick-1-w{background-position:0 -64px}.ui-icon-arrowreturnthick-1-n{background-position:-16px -64px}.ui-icon-arrowreturnthick-1-e{background-position:-32px -64px}.ui-icon-arrowreturnthick-1-s{background-position:-48px -64px}.ui-icon-arrowreturn-1-w{background-position:-64px -64px}.ui-icon-arrowreturn-1-n{background-position:-80px -64px}.ui-icon-arrowreturn-1-e{background-position:-96px -64px}.ui-icon-arrowreturn-1-s{background-position:-112px -64px}.ui-icon-arrowrefresh-1-w{background-position:-128px -64px}.ui-icon-arrowrefresh-1-n{background-position:-144px -64px}.ui-icon-arrowrefresh-1-e{background-position:-160px -64px}.ui-icon-arrowrefresh-1-s{background-position:-176px -64px}.ui-icon-arrow-4{background-position:0 -80px}.ui-icon-arrow-4-diag{background-position:-16px -80px}.ui-icon-extlink{background-position:-32px -80px}.ui-icon-newwin{background-position:-48px -80px}.ui-icon-refresh{background-position:-64px -80px}.ui-icon-shuffle{background-position:-80px -80px}.ui-icon-transfer-e-w{background-position:-96px -80px}.ui-icon-transferthick-e-w{background-position:-112px -80px}.ui-icon-folder-collapsed{background-position:0 -96px}.ui-icon-folder-open{background-position:-16px -96px}.ui-icon-document{background-position:-32px -96px}.ui-icon-document-b{background-position:-48px -96px}.ui-icon-note{background-position:-64px -96px}.ui-icon-mail-closed{background-position:-80px -96px}.ui-icon-mail-open{background-position:-96px -96px}.ui-icon-suitcase{background-position:-112px -96px}.ui-icon-comment{background-position:-128px -96px}.ui-icon-person{background-position:-144px -96px}.ui-icon-print{background-position:-160px -96px}.ui-icon-trash{background-position:-176px -96px}.ui-icon-locked{background-position:-192px -96px}.ui-icon-unlocked{background-position:-208px -96px}.ui-icon-bookmark{background-position:-224px -96px}.ui-icon-tag{background-position:-240px -96px}.ui-icon-home{background-position:0 -112px}.ui-icon-flag{background-position:-16px -112px}.ui-icon-calendar{background-position:-32px -112px}.ui-icon-cart{background-position:-48px -112px}.ui-icon-pencil{background-position:-64px -112px}.ui-icon-clock{background-position:-80px -112px}.ui-icon-disk{background-position:-96px -112px}.ui-icon-calculator{background-position:-112px -112px}.ui-icon-zoomin{background-position:-128px -112px}.ui-icon-zoomout{background-position:-144px -112px}.ui-icon-search{background-position:-160px -112px}.ui-icon-wrench{background-position:-176px -112px}.ui-icon-gear{background-position:-192px -112px}.ui-icon-heart{background-position:-208px -112px}.ui-icon-star{background-position:-224px -112px}.ui-icon-link{background-position:-240px -112px}.ui-icon-cancel{background-position:0 -128px}.ui-icon-plus{background-position:-16px -128px}.ui-icon-plusthick{background-position:-32px -128px}.ui-icon-minus{background-position:-48px -128px}.ui-icon-minusthick{background-position:-64px -128px}.ui-icon-close{background-position:-80px -128px}.ui-icon-closethick{background-position:-96px -128px}.ui-icon-key{background-position:-112px -128px}.ui-icon-lightbulb{background-position:-128px -128px}.ui-icon-scissors{background-position:-144px -128px}.ui-icon-clipboard{background-position:-160px -128px}.ui-icon-copy{background-position:-176px -128px}.ui-icon-contact{background-position:-192px -128px}.ui-icon-image{background-position:-208px -128px}.ui-icon-video{background-position:-224px -128px}.ui-icon-script{background-position:-240px -128px}.ui-icon-alert{background-position:0 -144px}.ui-icon-info{background-position:-16px -144px}.ui-icon-notice{background-position:-32px -144px}.ui-icon-help{background-position:-48px -144px}.ui-icon-check{background-position:-64px -144px}.ui-icon-bullet{background-position:-80px -144px}.ui-icon-radio-off{background-position:-96px -144px}.ui-icon-radio-on{background-position:-112px -144px}.ui-icon-pin-w{background-position:-128px -144px}.ui-icon-pin-s{background-position:-144px -144px}.ui-icon-play{background-position:0 -160px}.ui-icon-pause{background-position:-16px -160px}.ui-icon-seek-next{background-position:-32px -160px}.ui-icon-seek-prev{background-position:-48px -160px}.ui-icon-seek-end{background-position:-64px -160px}.ui-icon-stop{background-position:-96px -160px}.ui-icon-eject{background-position:-112px -160px}.ui-icon-volume-off{background-position:-128px -160px}.ui-icon-volume-on{background-position:-144px -160px}.ui-icon-power{background-position:0 -176px}.ui-icon-signal-diag{background-position:-16px -176px}.ui-icon-signal{background-position:-32px -176px}.ui-icon-battery-0{background-position:-48px -176px}.ui-icon-battery-1{background-position:-64px -176px}.ui-icon-battery-2{background-position:-80px -176px}.ui-icon-battery-3{background-position:-96px -176px}.ui-icon-circle-plus{background-position:0 -192px}.ui-icon-circle-minus{background-position:-16px -192px}.ui-icon-circle-close{background-position:-32px -192px}.ui-icon-circle-triangle-e{background-position:-48px -192px}.ui-icon-circle-triangle-s{background-position:-64px -192px}.ui-icon-circle-triangle-w{background-position:-80px -192px}.ui-icon-circle-triangle-n{background-position:-96px -192px}.ui-icon-circle-arrow-e{background-position:-112px -192px}.ui-icon-circle-arrow-s{background-position:-128px -192px}.ui-icon-circle-arrow-w{background-position:-144px -192px}.ui-icon-circle-arrow-n{background-position:-160px -192px}.ui-icon-circle-zoomin{background-position:-176px -192px}.ui-icon-circle-zoomout{background-position:-192px -192px}.ui-icon-circle-check{background-position:-208px -192px}.ui-icon-circlesmall-plus{background-position:0 -208px}.ui-icon-circlesmall-minus{background-position:-16px -208px}.ui-icon-circlesmall-close{background-position:-32px -208px}.ui-icon-squaresmall-plus{background-position:-48px -208px}.ui-icon-squaresmall-minus{background-position:-64px -208px}.ui-icon-squaresmall-close{background-position:-80px -208px}.ui-icon-grip-dotted-vertical{background-position:0 -224px}.ui-icon-grip-dotted-horizontal{background-position:-16px -224px}.ui-icon-grip-solid-vertical{background-position:-32px -224px}.ui-icon-grip-solid-horizontal{background-position:-48px -224px}.ui-icon-gripsmall-diagonal-se{background-position:-64px -224px}.ui-icon-grip-diagonal-se{background-position:-80px -224px}.ui-corner-all,.ui-corner-top,.ui-corner-left,.ui-corner-tl{-moz-border-radius-topleft:8px;-webkit-border-top-left-radius:8px;-khtml-border-top-left-radius:8px;border-top-left-radius:8px}.ui-corner-all,.ui-corner-top,.ui-corner-right,.ui-corner-tr{-moz-border-radius-topright:8px;-webkit-border-top-right-radius:8px;-khtml-border-top-right-radius:8px;border-top-right-radius:8px}.ui-corner-all,.ui-corner-bottom,.ui-corner-left,.ui-corner-bl{-moz-border-radius-bottomleft:8px;-webkit-border-bottom-left-radius:8px;-khtml-border-bottom-left-radius:8px;border-bottom-left-radius:8px}.ui-corner-all,.ui-corner-bottom,.ui-corner-right,.ui-corner-br{-moz-border-radius-bottomright:8px;-webkit-border-bottom-right-radius:8px;-khtml-border-bottom-right-radius:8px;border-bottom-right-radius:8px}.ui-widget-shadow{background:#ccc url(/cw3/images/ui-bg_flat_30_cccccc_40x100.png) 50% 50% repeat-x;opacity:.6;filter:Alpha(Opacity=60);-moz-border-radius:8px;-khtml-border-radius:8px;-webkit-border-radius:8px;border-radius:8px;margin:-7px 0 0 -7px;padding:7px}.ui-slider{position:relative;text-align:left}.ui-slider .ui-slider-handle{position:absolute;z-index:2;width:1.2em;height:1.2em;cursor:default}.ui-slider .ui-slider-range{position:absolute;z-index:1;font-size:.7em;display:block;border:0;background-position:0 0}.ui-slider-horizontal{height:.8em}.ui-slider-horizontal .ui-slider-handle{top:-.3em;margin-left:-.6em}.ui-slider-horizontal .ui-slider-range{top:0;height:100%}.ui-slider-horizontal .ui-slider-range-min{left:0}.ui-slider-horizontal .ui-slider-range-max{right:0}.ui-slider-vertical{width:.8em;height:100px}.ui-slider-vertical .ui-slider-handle{left:-.3em;margin-left:0;margin-bottom:-.6em}.ui-slider-vertical .ui-slider-range{left:0;width:100%}.ui-slider-vertical .ui-slider-range-min{bottom:0}.ui-slider-vertical .ui-slider-range-max{top:0}span.tt span,.ui-helper-hidden{display:none}.ui-widget-header a,.ui-state-error a,.ui-widget-content .ui-state-error a,.ui-widget-header .ui-state-error a,.ui-state-error-text,.ui-widget-content .ui-state-error-text,.ui-widget-header .ui-state-error-text{color:#fff}.ui-icon-seek-start,.ui-icon-seek-first{background-position:-80px -160px}.reveal-modal-bg{position:fixed;height:100%;width:100%;background:rgba(0,0,0,.8);z-index:100;display:none;top:0;left:0}.reveal-modal{width:400px;max-width:100%;padding:30px 40px 34px;box-sizing:border-box;visibility:hidden;top:100px;left:0;right:0;margin:auto;background:#eee url(/cw3/images/modal-gloss.png) no-repeat -200px -80px;position:absolute;z-index:101;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;-moz-box-shadow:0 0 10px rgba(0,0,0,.4);-webkit-box-shadow:0 0 10px rgba(0,0,0,.4);box-shadow:0 0 10px rgba(0,0,0,.4)}.reveal-modal.small{width:200px;margin-left:-140px}.reveal-modal.medium{width:400px;margin-left:-240px}.reveal-modal.large{width:600px;margin-left:-340px}.reveal-modal.xlarge{width:800px;margin-left:-440px}.reveal-modal .close-reveal-modal{font-size:22px;line-height:.5;position:absolute;top:8px;right:11px;color:#aaa;text-shadow:0 -1px 1px rbga(0,0,0,.6);font-weight:700;cursor:pointer}#tiptip_holder{display:none;position:absolute;top:0;left:0;z-index:99999}#tiptip_holder.tip_top{padding-bottom:5px}#tiptip_holder.tip_bottom{padding-top:5px}#tiptip_holder.tip_right{padding-left:5px}#tiptip_holder.tip_left{padding-right:5px}#tiptip_content{font-size:11px;color:#fff;text-shadow:0 0 2px #000;border:1px solid rgba(255,255,255,.25);background-color:rgba(25,25,25,.92);background-image:0;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;box-shadow:0 0 3px #555;-webkit-box-shadow:0 0 3px #555;-moz-box-shadow:0 0 3px #555;padding:4px 8px}#tiptip_arrow,#tiptip_arrow_inner{position:absolute;height:0;width:0;border-color:transparent;border-style:solid;border-width:6px}#tiptip_holder.tip_top #tiptip_arrow{border-top-color:rgba(255,255,255,.35)}#tiptip_holder.tip_bottom #tiptip_arrow{border-bottom-color:rgba(255,255,255,.35)}#tiptip_holder.tip_right #tiptip_arrow{border-right-color:rgba(255,255,255,.35)}#tiptip_holder.tip_left #tiptip_arrow{border-left-color:rgba(255,255,255,.35)}#tiptip_holder.tip_top #tiptip_arrow_inner{margin-top:-7px;margin-left:-6px;border-top-color:rgba(25,25,25,.92)}#tiptip_holder.tip_bottom #tiptip_arrow_inner{margin-top:-5px;margin-left:-6px;border-bottom-color:rgba(25,25,25,.92)}#tiptip_holder.tip_right #tiptip_arrow_inner{margin-top:-6px;margin-left:-5px;border-right-color:rgba(25,25,25,.92)}#tiptip_holder.tip_left #tiptip_arrow_inner{margin-top:-6px;margin-left:-7px;border-left-color:rgba(25,25,25,.92)}
@@ -6076,8 +6296,8 @@ input#text {
     color: ${globals.cgHisFCol} !important;}
   .ui-icon-gripsmall-diagonal-se {
     position: absolute;
-    top: 1px;
-    left: 1px;}
+    bottom: 1px;
+    right: 1px; } }
   div#clockContainer {
     position: absolute;
     top: ${globals.cgClockY}px;
@@ -6345,10 +6565,61 @@ color: ${globals.cgParAlertFCol}
 
   css+= `</style>`
   $('head').append(css);
+
+
+  let svgDrag = `<svg
+     version="1.1"
+     id="svg1"
+     width="15"
+     height="15"
+     viewBox="0 0 512 512"
+     sodipodi:docname="Перетаскивалка.svg"
+     inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+     xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:svg="http://www.w3.org/2000/svg">
+    <defs
+       id="defs1" />
+    <sodipodi:namedview
+       id="namedview1"
+       pagecolor="#ffffff"
+       bordercolor="#000000"
+       borderopacity="0.25"
+       inkscape:showpageshadow="2"
+       inkscape:pageopacity="0.0"
+       inkscape:pagecheckerboard="0"
+       inkscape:deskcolor="#d1d1d1"
+       inkscape:zoom="1.4628906"
+       inkscape:cx="255.65821"
+       inkscape:cy="256"
+       inkscape:window-width="1680"
+       inkscape:window-height="987"
+       inkscape:window-x="1672"
+       inkscape:window-y="-8"
+       inkscape:window-maximized="1"
+       inkscape:current-layer="g1" />
+    <g
+       inkscape:groupmode="layer"
+       inkscape:label="Image"
+       id="g1">
+      <image
+         width="512"
+         height="512"
+         preserveAspectRatio="none"
+         xlink:href="data:image/png;base64,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&#10;+38EJmBX0eCZhgAAAABJRU5ErkJggg==&#10;"
+         id="image1"
+         style="display:none" />
+      <path
+         style="fill:#000000;stroke-width:1.22836"
+         d="m 248.01647,509.68891 c -4.64883,-2.38491 -84.87814,-82.23219 -87.39664,-86.98046 -3.49873,-6.5964 -2.16922,-16.06914 3.10169,-22.09932 4.82223,-5.51688 16.0054,-7.73376 22.45924,-4.45218 1.58087,0.80381 13.51502,12.038 26.5203,24.96487 l 23.64595,23.50337 V 360.18712 275.74907 H 151.93665 67.526251 l 24.745646,24.87432 c 15.955403,16.0384 25.049303,26.10024 25.600513,28.32542 1.32029,5.32981 -0.0745,13.74959 -2.94548,17.78161 -4.94754,6.94816 -17.002977,9.84272 -24.508883,5.88467 C 88.593692,351.65307 67.937476,331.61542 44.51532,308.08698 -1.5274282,261.83528 -0.96727816,262.56516 1.0792099,251.48892 c 0.7381862,-3.99531 6.4187587,-10.19975 42.8222831,-46.77139 23.084162,-23.19076 43.552922,-42.99809 45.48614,-44.01631 6.95901,-3.66521 17.992277,-1.72041 23.046987,4.06242 5.03236,5.75728 6.60543,15.41307 3.50451,21.51157 -0.80381,1.58088 -12.038,13.51502 -24.964865,26.5203 l -23.503389,23.64596 h 84.438084 84.43805 V 152.00342 67.565341 l -23.64595,23.503377 c -13.00528,12.926872 -24.93943,24.161062 -26.5203,24.964872 -6.45384,3.28158 -17.63701,1.0647 -22.45924,-4.45218 -5.26472,-6.02312 -6.59834,-15.485174 -3.11476,-22.099323 1.01822,-1.933218 20.82556,-22.401979 44.01631,-45.486136 36.57163,-36.4035222 42.77608,-42.0840947 46.77139,-42.8222821 11.07624,-2.04648675 10.34635,-2.6066379 56.59806,43.4361121 23.52844,23.422148 43.56609,44.078364 44.52811,45.902719 3.95805,7.505908 1.06349,19.56135 -5.88467,24.50889 -4.03202,2.87104 -12.4518,4.26576 -17.78161,2.94548 -2.22518,-0.55121 -12.28701,-9.64511 -28.32542,-25.60052 L 275.65461,67.620716 v 84.410394 84.41036 h 84.43805 84.43808 l -23.50338,-23.64596 c -12.92686,-13.00528 -24.16106,-24.93942 -24.96487,-26.5203 -3.10091,-6.0985 -1.52784,-15.75429 3.50453,-21.51157 5.05469,-5.78283 16.08797,-7.72763 23.04697,-4.06242 1.93323,1.01822 22.40199,20.82555 45.48614,44.01631 45.37357,45.58313 44.86649,44.92018 42.82228,55.98409 -0.73819,3.99531 -6.41875,10.19975 -42.82228,46.77139 -23.08415,23.19076 -43.55291,42.99809 -45.48614,44.01631 -6.61414,3.48358 -16.0762,2.14997 -22.09932,-3.11476 -5.51687,-4.82223 -7.73376,-16.00539 -4.45218,-22.45923 0.80381,-1.58088 12.03801,-13.51502 24.96487,-26.5203 l 23.50338,-23.64596 h -84.43808 -84.43805 v 84.43805 84.43807 l 23.64596,-23.50337 c 13.00528,-12.92687 24.93943,-24.16106 26.5203,-24.96487 6.45384,-3.28158 17.637,-1.0647 22.45923,4.45218 5.2677,6.02651 6.59934,15.49374 3.10848,22.09932 -2.75252,5.20842 -84.37162,86.0732 -88.40465,87.58761 -4.88378,1.83388 -10.66649,1.5993 -14.96746,-0.60715 z"
+         id="path1" />
+    </g>
+  </svg>`
+
   function configureBlock(blockId, widthVar, heightVar, xPosVar, yPosVar) {
   const block = $(`${blockId}`);
-  const dragButton = $('<span class="drag-button" style="display: block; position: absolute; left: 20px; top: 3px; cursor: move; width: 20px; height: 20px; background-color: white;"></span>');
-  block.prepend(dragButton);
   block.resizable({
     handles: 'all',
     resize: function (event, ui) {
@@ -6360,7 +6631,6 @@ color: ${globals.cgParAlertFCol}
   });
   block.draggable({
     containment: "document",
-    handle: dragButton,
     drag: function (event, ui) {
       const newXPos = ui.offset.left;
       const newYPos = ui.offset.top;
@@ -6379,6 +6649,15 @@ color: ${globals.cgParAlertFCol}
     setSettings(key, val);
     console.log(key, ': ', val, '.')
   });
+
+$(document).ready(function() {
+  $("#ctFolderBtns span").click(function() {
+    var folderNumber = $(this).attr('id').replace('folHandle', '');
+    $("#folder1, #folder2, #folder3").hide();
+    $("#folder" + folderNumber).show();
+  });
+});
+
 $(document).ready(function(){
   setTimeout(function(){
     configureBlock('#sky', 'cgSkyWid', 'cgSkyHei', 'cgSkyX', 'cgSkyY');
@@ -6411,7 +6690,6 @@ function importSettings() {
   try {
     const importedSettings = JSON.parse(inputImport.value);
     Object.keys(importedSettings).forEach(key => {
-      // Добавляем префикс к ключам
       const localStorageKey = 'cs_n_' + key;
       if (typeof importedSettings[key] === 'string' && !isNaN(parseFloat(importedSettings[key]))) {
         globals[key] = parseFloat(importedSettings[key]);
