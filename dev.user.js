@@ -4158,7 +4158,7 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
       color: var(--cwsc-txt-1);
       border: 3px solid var(--cwsc-brdr-1) !important;
       border-radius: 10px;
-      height: 630px;
+      height: 630px !important;
       z-index: 500; }
 
       .tmTable .tmThingSafe { background-color: var(--tm-safe); }
@@ -4194,7 +4194,7 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
       background-color: var(--cwsc-bckg-2);
       border: 2px solid var(--cwsc-brdr-1); }
 
-      #tmBlock.folded { height: 25px; }
+      #tmBlock.folded { height: 25px !important; }
 
       div#tmHeader {
       display: grid;
@@ -4314,7 +4314,7 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
       color: var(--cwsc-txt-1);
       border: 3px solid var(--cwsc-brdr-1) !important;
       border-radius: 10px;
-      height: 520px;
+      height: 520px !important;
       z-index: 500; }
 
       .tmTable .tmThingSafe { background-color: var(--tm-safe); }
@@ -4350,7 +4350,7 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
       background-color: var(--cwsc-bckg-2);
       border: 2px solid var(--cwsc-brdr-1); }
 
-      #tmBlock.folded { height: 25px; }
+      #tmBlock.folded { height: 25px !important; }
 
       div#tmHeader {
       display: grid;
@@ -4787,6 +4787,8 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
         if (globals['tmVariant'] == 2) { // Горизонт
           console.log('Горизонтальное минное поле 😨')
         }
+      } else {
+        console.log('Вы с пк 😡')
       }
 
       $('.tmBTNS').on('change', function() {
