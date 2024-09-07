@@ -4782,7 +4782,7 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
         if (globals['tmVariant'] == 0) { // Классик
           let css = `
             <style>
-              #tmBlock { height: 680px !important; }
+              #tmBlock { height: 1000px !important; }
               #tmBlock.folded { height: 25px !important; }
             </style>`
           $('head').append(css);
@@ -4790,7 +4790,7 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
         if (globals['tmVariant'] == 1) { // Компакт
           let css = `
             <style>
-              #tmBlock { height: 560px !important; }
+              #tmBlock { height: 1000px !important; }
               #tmBlock.folded { height: 25px !important; }
             </style>`
           $('head').append(css);
