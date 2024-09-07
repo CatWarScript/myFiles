@@ -4286,7 +4286,7 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
       border-radius: 3px !important;
       width: 252px;
       padding: 3px 10px;
-      margin: 0px 10px; }
+      margin: 0px 10px 10px; }
         </style>`
 
         if (1==1) {
@@ -4443,7 +4443,7 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
       border-radius: 3px !important;
       width: 252px;
       padding: 3px 10px;
-      margin: 0px 10px; }
+      margin: 0px 10px 10px; }
       </style>`
 
       if (1==1) {
@@ -4465,7 +4465,6 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
       border: 3px solid var(--cwsc-brdr-1) !important;
       border-radius: 10px;
       width: 495px;
-      height: 280px;
       z-index: 500; }
 
       .tmTable .tmThingSafe { background-color: var(--tm-safe); }
@@ -4610,7 +4609,7 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
       border-radius: 3px !important;
       width: 185px;
       padding: 3px 10px;
-      margin: 0px 10px; }
+      margin: 0px 10px 63px; }
         </style>`
 
         if (1==1) {
