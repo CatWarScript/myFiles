@@ -18,7 +18,7 @@
 
 'use strict';
 
-const version = 1.0
+const version = 'v1.0'
 const csDefaults = {
      'textTemplates': true //               ШАБЛОНЫ В ЛС
       ,'toggleTT': false //                  Сворачивать ли шаблоны ЛС по умолчанию
@@ -56,7 +56,7 @@ const csDefaults = {
       ,'cdSPoison3B': true //                 3 стадия (!)
       ,'cdSPoison4': true //                  4 стадия
       ,'cdSPoison4B': true //                 4 стадия (!!!)
-     ,'cdCTrauma': "#46ffef"  //             УШИБЫ (ЦВЕТ)
+     ,'cdCTrauma': "#46ffef" //             УШИБЫ (ЦВЕТ)
       ,'cdSTrauma1': true //                  1 стадия
       ,'cdSTrauma2': true //                  2 стадия
       ,'cdSTrauma3': true //                  3 стадия
@@ -109,7 +109,7 @@ const csDefaults = {
     ,'showButterflyBots': false //          Показывать бота-бабочку для прокачки бу
     ,'fightWarning': false //               Уведомление о введении в опасный БР
     ,'fightWarningVol': 1
-    ,'fightWarningHref': ''
+    ,'fightWarningHref': 'https://github.com/CatWarScript/CatWarScript/raw/main/audios/attackAlarm.mp3'
     ,'shortFightLog': false //              Сокращать лог БР
 
  //                                         СПИСОК ДРУЗЕЙ И ВРАГОВ
@@ -133,25 +133,27 @@ const csDefaults = {
     ,'diverSiren': false //                Громкие звуки при большом сне на нырялках
      ,'diverSirenMinutes' : 35 //           На какой минуте начинает срабатывать сирена?
      ,'diverSirenVol': 0.7 //               Громкость звука (Дефолтный звук сирена минус 10 социальный кредит)
-     ,'diverSirenHref' : "https://github.com/CatWarScript/CatWarScript/raw/main/audios/SIRENA_SOCIAL_CREDIT.mp3"
+     ,'diverSirenHref' : "https://github.com/CatWarScript/CatWarScript/raw/main/audios/soundDiver.mp3"
      ,'dsY': 50
      ,'dsX': 50
     ,'kalinnikFunction': false //          Не включайте это
      ,'kalinnikFunctionVolume': 0.7 //      (Пожалуйста)
     ,'smellTimer': false //                Таймер до следующего нюха
      ,'smellTimerVol': 0.7 //               Громкость таймера нюха
-     ,'smellTimerHref': 'https://abstract-class-shed.github.io/cwshed/action_end.mp3' //             Ссылка на звук таймера нюха
+     ,'smellTimerHref': 'https://github.com/CatWarScript/CatWarScript/raw/main/audios/actionEnd.mp3' //             Ссылка на звук таймера нюха
     ,'newLS': false //                     Уведомлять о новых ЛС
      ,'newLSVol': 0.7 //                    Громкость уведомления о новом ЛС
     ,'newChat': false //                   Уведомлять о новых сообщениях в Чате
      ,'newChatVol': 0.7 //                  Громкость уведомления о новом чате
-    ,'raiseNote': false //                 Уведомление о поднятии в игровой
-    ,'raiseNoteVol': 0.7 //                 Громкость уведомления о поднятии
+    ,'eatenNote': false //                 Уведомление о поднятии в игровой
+    ,'eatenNoteVol': 0.7 //                 Громкость уведомления о поднятии
+    ,'messageSound': 'https://catwar.su/new_message.mp3'
+
 
     ,'treeMap': true //                    ОКОШКО ЛАЗАЛОК
      ,'tmResetNote': true //                Уведомление при изменении карты
      ,'tmResetVolume': 0.5 //               Громкость уведомления об изменении карты
-     ,'tmResetSource': 'https://abstract-class-shed.github.io/cwshed/refresh.wav'
+     ,'tmResetSource': 'https://github.com/CatWarScript/CatWarScript/raw/main/audios/refresh.mp3'
      ,'tmShowVolume': true //               Показывать громкость звуков в чате?
      ,'tmClearConfirm': true //             Запрашивать подтверждение при очистке карты?
      ,'tmFolded': true //                   Окошко изначально свёрнуто?
@@ -214,7 +216,7 @@ const csDefaults = {
     ,'cgBorders': true
     ,'cgTbBorder': true
     ,'cgSmallFW': 14 // Смалл фонт вейт
-    ,'cgYouBG': ''  // Фон упомянания
+    ,'cgYouBG': '' // Фон упомянания
     ,'cgYouFC': '' // Цвет упомянания
     ,'cgInputCol': '#ffffff'
     ,'cgInputFCol': '#000000'
@@ -563,12 +565,12 @@ content: " ✦"; } */
 /* div#cwsSetList input.cs-set[type="checkbox"] {
 margin: 0px 3px 0px 4px; } */
 
-div#trSetHead {
+div#trSetHead, div#cwmodTrSetHead {
 width: 100%;
 display: flex;
 flex-wrap: wrap; }
 
-div#trOne {
+div#trOne, div#cwmodTrOne {
 width: 100%;
 display: flex; }
 
@@ -577,15 +579,19 @@ width: 100%;
 display: flex;
 flex-wrap: wrap; }
 
-div#trThree {
+div#cwmodTrTwo {
 width: 100%;
 display: flex; }
 
-div#trFour {
+div#trThree, div#cwmodTrThree {
 width: 100%;
 display: flex; }
 
-div#trFive {
+div#trFour, div#cwmodTrFour {
+width: 100%;
+display: flex; }
+
+div#trFive, div#cwmodTrFive {
 width: 100%;
 display: flex; }
 
@@ -593,7 +599,7 @@ div#trSix {
 width: 100%;
 display: flex; }
 
-div#cwsSetListHeader {
+div#cwsSetListHeader, div#cwmodSetListHeader {
 width: 100%;
 background-color: var(--cwsc-bckg-4);
 display: grid;
@@ -602,8 +608,11 @@ margin: 15px 15px 0px 0px;
 padding: 8px;
 border-radius: 5px; }
 
-div#cwsSetListHeader h2 {
+div#cwsSetListHeader h2, div#cwmodSetListHeader h2 {
 margin: 0px; }
+
+#cwmod-settings h2 {
+text-indent: 0px !important; }
 
 div#sbClock, div#sbFight, div#sbCostumes, div#sbTrees {
 width: 50%;
@@ -614,7 +623,7 @@ margin: 15px 15px 0px 0px;
 padding: 8px;
 border-radius: 5px; }
 
-div#sbBoneCorrect, div#sbLS {
+div#sbBoneCorrect, div#sbLS, div#cmSite, div#cmGame {
 width: 100%;
 background-color: var(--cwsc-bckg-3);
 display: grid;
@@ -624,6 +633,15 @@ padding: 8px;
 border-radius: 5px; }
 
 div#sbTemplates, div#sbOthers {
+width: 50%;
+background-color: var(--cwsc-bckg-3);
+display: grid;
+align-content: stretch;
+margin: 15px 15px 0px 0px;
+padding: 8px;
+border-radius: 5px; }
+
+div#cmObj, div#cmLocation, div#cmChat, div#cmKns, div#cmStyle, div#cmPlayers {
 width: 50%;
 background-color: var(--cwsc-bckg-3);
 display: grid;
@@ -683,12 +701,15 @@ table#defectTable tr td input[type=color], table#itemTable tr td input[type=colo
 width: 50px !important;
 height: 25px; }
 
-table#defectTable>tbody>tr:first-of-type, table#defectTable>tbody>tr:nth-of-type(7), table#defectTable>tbody>tr:nth-of-type(10)>td:nth-of-type(2),
-table#itemTable>tbody>tr:first-of-type, table#itemTable>tbody>tr:nth-of-type(4), table#itemTable>tbody>tr:nth-of-type(7), table#itemTable>tbody>tr:nth-of-type(10),
+table#defectTable>tbody>tr:first-of-type, table#defectTable>tbody>tr:nth-of-type(2), table#defectTable>tbody>tr:nth-of-type(8), table#defectTable>tbody>tr:nth-of-type(11)>td:nth-of-type(2),
+table#itemTable>tbody>tr:first-of-type, table#itemTable>tbody>tr:nth-of-type(2), table#itemTable>tbody>tr:nth-of-type(5), table#itemTable>tbody>tr:nth-of-type(8), table#itemTable>tbody>tr:nth-of-type(11),
 table#templateTable>tbody>tr:first-of-type, table#templateTable>tbody>tr:nth-of-type(4), table#replaceTable>tbody>tr:first-of-type {
 background-color: var(--cwsc-bckg-4) !important;
 font-weight: 600;
 font-size: 13px; }
+
+table#defectTable>tbody>tr:first-of-type, table#itemTable>tbody>tr:first-of-type {
+font-size: 15px; }
 
 table#defectTable>tbody>tr:not(:first-of-type), table#itemTable>tbody>tr:not(:first-of-type), table#templateTable>tbody>tr:not(:first-of-type), table#replaceTable>tbody>tr:not(:first-of-type) {
 background-color: var(--cwsc-bckg-7); }
@@ -699,6 +720,9 @@ margin: 0; }
 
 div#libCustom {
 margin: 10px 0px 5px; }
+
+div#cwmodMenuList, div#cwmodCustSet {
+margin: 10px 0px 10px; }
 
 div#cwsSetList .ui-slider-horizontal {
 background: var(--cwsc-bckg-2) !important;
@@ -739,7 +763,7 @@ display: grid;
 justify-content: start;
 margin: 0px 15px 0px 0px; }
 
-button#formButton:hover, button#customButton:hover, button#clearDontReadButton:hover, select#tmVariant:hover, select#selTheme:hover, input.cs-set[type="color"]:hover, input.cs-set[type="number"]:hover {
+button#formButton:hover, button#customButton:hover, button#clearDontReadButton:hover, select#tmVariant:hover, select#selTheme:hover, input.cs-set[type="color"]:hover, input.cs-set[type="number"]:hover, input#inputImport:hover, button#inputExport:hover, input#outputExport:hover, select#cwmodTheme:hover, select#cw3Bkg:hover, select#cw3BkgSize:hover, select#cw3BkgPos:hover, input.cwmod-settings[type="text"]:hover, input.cwmod-settings[type="number"]:hover {
 border: 2px solid var(--cwsc-brdr-2) !important; }
 
 button#formButton {
@@ -782,7 +806,24 @@ border: 2px solid var(--cwsc-brdr-3);
 border-radius: 3px !important;
 padding: 1px 5px; }
 
-div#cwsSetList input.cs-set[type="color"], div#cwsSetList input.cs-set[type="number"] {
+select#cwmodTheme, div#cwmod-settings input.cwmod-settings[type="text"]:not(input#cw3BkgImg) {
+background-color: var(--cwsc-inpt-1);
+color: var(--cwsc-txt-4) !important;
+border: 2px solid var(--cwsc-brdr-3);
+border-radius: 3px !important;
+margin: 5px 0px;
+padding: 1px 5px; }
+
+select#cw3Bkg, input#cw3BkgImg, select#cw3BkgSize, select#cw3BkgPos {
+background-color: var(--cwsc-inpt-1);
+color: var(--cwsc-txt-4) !important;
+border: 2px solid var(--cwsc-brdr-3);
+border-radius: 3px !important;
+margin: 3px 0px;
+padding: 1px 5px;
+width: 80% !important; }
+
+div#cwsSetList input.cs-set[type="color"], div#cwsSetList input.cs-set[type="number"], div#cwmod-settings input.cwmod-settings[type="number"] {
 background-color: var(--cwsc-inpt-1);
 color: var(--cwsc-txt-4) !important;
 border: 1px solid var(--cwsc-brdr-4);
@@ -797,6 +838,27 @@ margin: 10px 0px; }
 
 table#gridTable, table#defTable, table#customTable {
 width: 50%; }
+
+table#impExpTable {
+width: 50%;
+margin: 15px 0px; }
+
+table#impExpTable td {
+padding: 0px 5px 10px; }
+
+div#cwsSetList input#inputImport, input#outputExport {
+width: 50%; }
+
+button#inputExport {
+background-color: var(--cwsc-inpt-1);
+color: var(--cwsc-txt-4) !important;
+border: 2px solid var(--cwsc-brdr-3);
+border-radius: 3px !important;
+width: fit-content;
+padding: 2px 5px;
+margin: 0px 0px;
+text-decoration: none;
+font-size: 13px; }
 
    </style>`
   $('head').append(cssForSett);
@@ -824,7 +886,7 @@ width: 50%; }
      <div class="active" id="div1">
 <div id="cwsSetList">
 <div id="trSetHead">
-    <div id="cwsSetListHeader"><h2>Настройки CatWar Script</h2></div>
+    <div id="cwsSetListHeader"><h2>Настройки CatWar Script ${version} </h2></div>
 </div>
 
 
@@ -844,6 +906,7 @@ width: 50%; }
        <div><input class="cs-set" id="friendlyCatWar" type="checkbox"${globals.friendlyCatWar?' checked':''}><label for="friendlyCatWar">Убрать кнопки входа в опасные режимы</label></div>
        <div><input class="cs-set" id="shortFightLog" type="checkbox"${globals.shortFightLog?' checked':''}><label for="shortFightLog">Сокращать лог боережима</label></div>
        <div><input class="cs-set" id="fightWarning" type="checkbox"${globals.fightWarning?' checked':''}><label for="fightWarning">Звуковое уведомление при нападении на вас</label></div>
+       <div class="cs-set cs-set-sl" id="fightWarningVol"></div><label for="fightWarningVol"><small><i>Громкость функции</i></small></label>
        <div><input class="cs-set" id="deleteFPTitles" type="checkbox"${globals.deleteFPTitles?' checked':''}><label for="deleteFPTitles">Убрать подписи к кнопкам<br><small><i>!!! Только для телефонов</i></small></label></div>
     </div>
 
@@ -864,6 +927,8 @@ width: 50%; }
        <div><input class="cs-set" id="tmFolded" type="checkbox"${globals.tmFolded?' checked':''}><label for="tmFolded">Изначально сворачивать окошко</label></div>
        <div><input class="cs-set" id="tmShowVolume" type="checkbox"${globals.tmShowVolume?' checked':''}><label for="tmShowVolume">Громкость в чате от ботов</label></div>
        <div><input class="cs-set" id="tmResetNote" type="checkbox"${globals.tmResetNote?' checked':''}><label for="tmResetNote">Звуковое уведомление при смене карты</label></div>
+       <input class="cs-set" id="tmTecPosX" type="number"${globals.tmTecPosX?' checked':''} style="width: 55px;" step="5"> <input class="cs-set" id="tmTecPosY" type="number"${globals.tmTecPosY?' checked':''} style="width: 55px;" step="5"><label for="tmTecPosY"> Расположение окошка по X/Y px</label>
+       <div class="cs-set cs-set-sl" id="tmResetVolume"></div><label for="tmResetVolume"><small><i>Громкость функции</i></small></label>
        <table id="tmVarTable"><tr><td><label for="tmVariant">Внешний вид редактора</label></td><td>
        <select class="cs-set" id="tmVariant">
        <option value="0">Классический</option>
@@ -949,8 +1014,8 @@ width: 50%; }
        <table class="sliderTable"><tr><td class="csSlider"><div class="cs-set cs-set-sl" id="newLSVol"></div></td><td class="csLabel"><label for="newLSVol"><small><i>Громкость функции</i></small></label></td></tr></table>
        <div><input class="cs-set" id="newChat" type="checkbox"${globals.newChat?' checked':''}><label for="newChat">Уведомлять о новых сообщениях в чате</label></div>
        <table class="sliderTable"><tr><td class="csSlider"><div class="cs-set cs-set-sl" id="newChatVol"></div></td><td class="csLabel"><label for="newChatVol"><small><i>Громкость функции</i></small></label></td></tr></table>
-       <div><input class="cs-set" id="raiseNote" type="checkbox"${globals.raiseNote?' checked':''}><label for="raiseNote">Уведомлять, если тебя подняли в Игровой</label></div>
-       <table class="sliderTable"><tr><td class="csSlider"><div class="cs-set cs-set-sl" id="raiseNoteVol"></div></td><td class="csLabel"><label for="raiseNoteVol"><small><i>Громкость функции</i></small></label></td></tr></table>
+       <div><input class="cs-set" id="eatenNote" type="checkbox"${globals.eatenNote?' checked':''}><label for="eatenNote">Уведомлять, если тебя подняли в Игровой</label></div>
+       <table class="sliderTable"><tr><td class="csSlider"><div class="cs-set cs-set-sl" id="eatenNoteVol"></div></td><td class="csLabel"><label for="eatenNoteVol"><small><i>Громкость функции</i></small></label></td></tr></table>
     </div>
 
 </div><div id="trSix">
@@ -965,16 +1030,22 @@ width: 50%; }
 
        <table id="customTable"><tr><td><button onclick="window.open('https://catwarscript.github.io/cw3edit', '_blank')" id="customButton">Конструктор игровой</button></td>
        <td><div><input class="cs-set" id="playerCustom" type="checkbox"${globals.playerCustom?' checked':''}><label for="playerCustom">Игровая из конструктора игровой</label></div></td></tr></table>
-        <label for="inputImport">Импорт настроек </label><input type="text" id="inputImport"><br>
-        <button id="inputExport">Экспорт настроек</button>
-        <input id="outputExport">
+
+
+
+
+
+
+<table id="impExpTable"><tr><td><label for="inputImport">Импорт настроек</label></td><td><input type="text" id="inputImport"></td></tr>
+<tr><td><button id="inputExport">Экспорт настроек</button></td><td><input id="outputExport"></td></tr></table>
 
        <div id="sbDefects">
-         <div><input class="cs-set" id="cdSColors" type="checkbox"${globals.cdSColors?' checked':''}><label for="cdSColors">Выделять клетки с больными игроками</label></div>
+         <div><input class="cs-set" id="cdSColors" type="checkbox"${globals.cdSColors?' checked':''}><label for="cdSColors">Выделять клетки с больными игроками<br><small><i>!!! Галочки слева отвечают за выделение недуга в целом, справа – за особое выделение для третьей и четвёртой стадии</i></small></label></label></div>
          <table id="defTable"><tr><td><div><input class="cs-set" id="cdSRamkiFalse" type="radio" name="iscdsramki"${!globals.cdSRamki?' checked':''} value="false"><label for="cdSRamkiFalse">Выделять всю клетку</label></div></td>
          <td><div><input class="cs-set" id="cdSRamkiTrue" type="radio" name="iscdsramki"${globals.cdSRamki?' checked':''} value="true"><label for="cdSRamkiTrue">Выделять рамку клетки</label></div></td></tr></table>
-         <div><input class="cs-set" id="cdSIcon" type="checkbox"${globals.cdSIcon?' checked':''}><label for="cdSIcon">Показывать иконки дефектов</label></div><br>
+         <div><input class="cs-set" id="cdSIcon" type="checkbox"${globals.cdSIcon?' checked':''}><label for="cdSIcon">Показывать иконки дефектов</div><br>
          <table id="defectTable">
+           <tr><td colspan="3">Подсветка болезней</td></tr>
            <tr>
              <td>Раны</td>
              <td>Отравление</td>
@@ -1030,6 +1101,7 @@ width: 50%; }
 
        <div id="sbItems">
          <table id="itemTable">
+           <tr><td colspan="3">Подсветка ресурсов</td></tr>
            <tr>
              <td>Травы</td>
              <td>Мох</td>
@@ -1077,9 +1149,6 @@ width: 50%; }
         </div></div></div>
         </td></tr></tbody></table></td></tr></tbody></table>`
 
-console.log(globals.clockFontWeight)
-console.log(globals.cstmDfctWounds)
-
 $(document).ready(function() {
   $('#clockFontWeight').val(globals.clockFontWeight);
   $('#cstmDfctWounds').val(globals.cstmDfctWounds);
@@ -1110,7 +1179,9 @@ $(document).ready(function() {
   $('#smellTimerHref').val(globals.smellTimerHref);
   $('#newLSVol').val(globals.newLSVol);
   $('#newChatVol').val(globals.newChatVol);
-  $('#raiseNoteVol').val(globals.raiseNoteVol);
+  $('#eatenNoteVol').val(globals.eatenNoteVol);
+  $('#tmTecPosX').val(globals.tmTecPosX);
+  $('#tmTecPosY').val(globals.tmTecPosY);
   if (globals.tmVariant !== null) {
     $('#tmVariant').val(globals.tmVariant);
   }
@@ -1215,44 +1286,41 @@ $('input[name="iscdsramki"]').on('change', function() {
   setSettings('cdSRamki', this.value === 'true');
 });
 
-    $(function() {
-      let sound = null;
-      $(document).on('slidechange', '.ui-slider', function() {
-        const sliderId = $(this).attr('id');
-        let soundId;
+  $(function() {
+    let sound = null;
 
-        if (sliderId === 'diverSirenVol') {
-          soundId = globals.diverSirenHref;
-        } else if (sliderId === 'smellTimerVol') {
-          soundId = globals.smellTimerHref;
-        } else if (sliderId === 'newLSVol' || sliderId === 'newChatVol') {
-          soundId = 'https://catwar.su/new_message.mp3';
-        } else if (sliderId === 'raiseNoteVol') {
-          soundId = globals.smellTimerHref;
-        } else if (sliderId === 'fightWarningVol') {
-          soundId = globals.fightWarningHref;
-        }
+    $(document).on('slidechange', '.ui-slider', function() {
+      const sliderId = $(this).attr('id');
+      let soundId;
 
-        if (soundId) {
-          playSoundWithSliderVolume(sliderId, soundId);
-        }
-      });
+      if (sliderId === 'diverSirenVol') {
+        soundId = globals.diverSirenHref;
+      } else if (sliderId === 'smellTimerVol') {
+        soundId = globals.smellTimerHref;
+      } else if (sliderId === 'newLSVol' || sliderId === 'newChatVol') {
+        soundId = globals.messageSound;
+      } else if (sliderId === 'eatenNoteVol') {
+        soundId = globals.smellTimerHref;
+      } else if (sliderId === 'fightWarningVol') {
+        soundId = globals.fightWarningHref;
+      } else if (sliderId === 'tmResetVolume') {
+        soundId = globals.tmResetSource;
+      }
 
-      function playSoundWithSliderVolume(sliderId, soundId) {
-        const sliderValue = $(`#${sliderId}`).slider('value');
-
+      if (soundId) {
         if (sound) {
-          sound.volume = sliderValue;
-        } else {
-          sound = new Audio(soundId);
-          sound.volume = sliderValue;
-          sound.play();
-          sound.onended = () => {
-            sound = null;
-          };
+          sound.pause();
+          sound = null;
         }
+        sound = new Audio(soundId);
+        sound.volume = $(`#${sliderId}`).slider('value');
+        sound.play();
+        sound.onended = () => {
+          sound = null;
+        };
       }
     });
+  });
 
   let settingsToResetDfct = [ 'customDefectDelay', 'cstmDfctWounds', 'cstmDfctBruise', 'cstmDfctFractures', 'cstmDfctPoison', 'cstmDfctCough', 'cstmDfctDirt', 'cstmDfctOpacity', 'cstmDfctShowColors', 'cstmDfctShowNum', 'cstmDfctShowHighDirt', 'cstmDfctShowLowDirt', 'cstmDfctShow34WoundBetter', 'cstmDfctShowAllBetter' ];
   let settingsToResetItm = [ 'customItemsDelay', 'cstmItmHerbDelay', 'cstmItmHerbClr', 'cstmItmMossDelay', 'cstmItmMossClr', 'cstmItmWebDelay', 'cstmItmWebClr', 'cstmItmStickDelay', 'cstmItmStickClr', 'cstmItmDustDelay', 'cstmItmDustClr', 'cstmItmOpacity', 'cstmItmMusorDelay', 'cstmItmMusorClr' ];
@@ -1626,30 +1694,42 @@ if (globals['timerForLS']) {
   script.src = "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js";
   document.getElementsByTagName('head')[0].appendChild(script);
 
+  let stylesAdded = false;
+
   function updateMessageStyles() {
     if (typeof moment !== "undefined") {
       let now = moment();
-
       $('#messList tr').each(function(index, element) {
         if (index === 0) return;
-
         if ($(element).attr('class') === 'msg_read') {
           return;
         }
         let dateText = $(element).find('td:nth-child(3)').text();
         let messageDate = moment(dateText, 'YYYY-MM-DD HH:mm:ss');
         let diffDays = now.diff(messageDate, 'days');
-        if (diffDays > 6 && diffDays <= 14) {
+        if (diffDays >= 6 && diffDays <= 14) {
           $(element).addClass('old-message');
-          $(element).css('background-color', 'var(--cwsc-bckg-8)');
+        } else {
+          $(element).removeClass('old-message');
         }
       });
+      if (!stylesAdded) {
+        let css = `
+          <style>
+            .old-message {
+              background-color: var(--cwsc-bckg-8);
+            }
+          </style>
+        `;
+        $('head').append(css);
+        stylesAdded = true;
+      }
     } else {
       setTimeout(updateMessageStyles, 100);
     }
   }
-updateMessageStyles();
-setInterval(updateMessageStyles, 1000);
+  updateMessageStyles();
+  setInterval(updateMessageStyles, 1000);
 }
 
 
@@ -1787,7 +1867,7 @@ function cw3() {
       const newLSCount = parseInt($('#newls').html().replace(/\D/gi, ''), 10) || 0;
       if (newLSCount !== lastLSCount) {
         if (newLSCount > lastLSCount) {
-          playAudio('https://catwar.su/new_message.mp3', globals.newLSVol);
+          playAudio(globals.messageSound, globals.newLSVol);
         }
         lastLSCount = newLSCount;
       }
@@ -1800,7 +1880,7 @@ function cw3() {
       const newChatCount = parseInt($('#newchat').html().replace(/\D/gi, ''), 10) || 0;
       if (newChatCount !== lastChatCount) {
         if (newChatCount > lastChatCount) {
-          playAudio('https://catwar.su/new_message.mp3', globals.newChatVol);
+          playAudio(globals.messageSound, globals.newChatVol);
         }
         lastChatCount = newChatCount;
       }
@@ -2932,12 +3012,6 @@ chatmsghei = chatmsghei - 22;
       #akten {
         width: 100%;
         height: 100%;}
-      #mit {
-        background-color: var(--BBO);
-        color: var(--TXT);}
-      #mitok {
-        background-color: var(--BBO);
-        color: var(--TXT);}
 
       #family {
         position: absolute;
@@ -3564,7 +3638,7 @@ if (globals.fightWarning) {
         last_note = $(targetNode.innerHTML.split('.')).get(-2);
         if (last_note !== undefined) {
           if (last_note.indexOf("в боевую стойку, поскольку на меня напал") !== -1 && !noteFirst) {
-            playAudio('https://d.zaix.ru/ihrv.mp3', globals.fwVol);
+            playAudio(globals.fightWarningHref, globals.fightWarningVol);
           }
           noteFirst = false;
         }
@@ -3573,6 +3647,41 @@ if (globals.fightWarning) {
   });
   observer.observe(targetNode, config);
 }
+  if (globals.eatenNote) {
+    const targetNode = document.getElementById('block_mess');
+    let soundPlayed = false;
+    let intervalId;
+    let titleChange = false;
+
+    function checkForNotification() {
+      if (targetNode.innerHTML.indexOf("Вы не сможете выбраться") !== -1 ||
+          targetNode.innerHTML.indexOf("Вас кто-то поднял!") !== -1) {
+        if (!soundPlayed) {
+          $('title').text("Во рту / Поднят!");
+          let audio1 = audioGlobal;
+          audio1.src = globals.smellTimerHref;
+          audio1.volume = globals.eatenNoteVol;
+          audio1.play();
+          soundPlayed = true;
+          titleChange = true;
+        } else {
+
+        }
+      } else {
+        if (titleChange) {
+          $('title').text('Игровая / CatWar');
+          titleChange = false;
+        } else {
+          // 7
+        }
+        soundPlayed = false;
+        clearInterval(intervalId);
+        intervalId = setInterval(checkForNotification, 1000);
+      }
+    }
+
+    intervalId = setInterval(checkForNotification, 1000);
+  }
 
 
     if (globals["diverSiren"]) {
@@ -3673,13 +3782,13 @@ if (globals.fightWarning) {
           </style>`
           $('head').append(cssS);
   $('body').on('click', '#startButton', function() {
-    console.log('startObserver called'); // Проверка, что startObserver вызывается
+    console.log('startObserver called');
     startObserver();
     $('#sblock').animate({ backgroundColor: '#21c44f' }, 500);
   });
 
   $('body').on('click', '#stopButton', function() {
-    console.log('stopObserver called'); // Проверка, что stopObserver вызывается
+    console.log('stopObserver called');
     stopObserver();
     $('#sblock').animate({ backgroundColor: '#d30d0d' }, 500);
   });
@@ -3822,8 +3931,6 @@ if (globals.fightWarning) {
         if (1==1) {
          $('#tmBlock').append(tmBlockThings);
         }
-
-
 
       }
       if (globals.tmVariant != 0) {
@@ -4836,7 +4943,7 @@ function all() {
 --cwsc-bckg-5: #1d1b24 !important;
 --cwsc-bckg-6: #DBAEFF !important;
 --cwsc-bckg-7: #6b627150 !important;
---cwsc-bckg-8: #ff7777 !important;
+--cwsc-bckg-8: #cd5062 !important;
 
 --cwsc-brdr-1: #332f3c !important;
 --cwsc-brdr-2: #8d5353 !important;
@@ -4891,7 +4998,7 @@ function all() {
       --cwsc-bckg-5: #CAAC88;
       --cwsc-bckg-6: #DBAEFF;
       --cwsc-bckg-7: #75524C50;
-      --cwsc-bckg-8: #ff7777;
+      --cwsc-bckg-8: #cd5062;
 
       --cwsc-brdr-1: #3F2D29;
       --cwsc-brdr-2: #AD7B3C;
@@ -4947,7 +5054,7 @@ function all() {
 --cwsc-bckg-5: #807d83;
 --cwsc-bckg-6: #DBAEFF;
 --cwsc-bckg-7: #92889950;
---cwsc-bckg-8: #ff7777;
+--cwsc-bckg-8: #cd5062;
 
 --cwsc-brdr-1: #393E41;
 --cwsc-brdr-2: #b2883f;
