@@ -403,13 +403,6 @@ catch (error) {
   console.error("An error occurred: ", error);
 }
 
-function isMobile() {
-  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-  return (
-    /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent)
-  );
-}
-
 // ...
 // ...
 // ...
@@ -4159,7 +4152,6 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
       color: var(--cwsc-txt-1);
       border: 3px solid var(--cwsc-brdr-1) !important;
       border-radius: 10px;
-      height: 630px;
       z-index: 500; }
 
       .tmTable .tmThingSafe { background-color: var(--tm-safe); }
@@ -4315,7 +4307,6 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
       color: var(--cwsc-txt-1);
       border: 3px solid var(--cwsc-brdr-1) !important;
       border-radius: 10px;
-      height: 520px;
       z-index: 500; }
 
       .tmTable .tmThingSafe { background-color: var(--tm-safe); }
@@ -4777,31 +4768,6 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
           $('#cages > tbody > tr > td.tmThingPerehod').removeClass('tmThingPerehod');
         }
       });
-
-      if (isMobile()) {
-        if (globals['tmVariant'] == 0) { // Классик
-          let css = `
-            <style>
-              #tmBlock { height: 1000px !important; }
-              #tmBlock.folded { height: 25px !important; }
-            </style>`
-          $('head').append(css);
-        }
-        if (globals['tmVariant'] == 1) { // Компакт
-          let css = `
-            <style>
-              #tmBlock { height: 1000px !important; }
-              #tmBlock.folded { height: 25px !important; }
-            </style>`
-          $('head').append(css);
-        }
-        if (globals['tmVariant'] == 2) { // Горизонт
-          // Вы молодец
-        }
-      } else {
-        // Вы молодец
-      }
-
 
       $('.tmBTNS').on('change', function() {
         let key = this.id;
