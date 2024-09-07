@@ -409,6 +409,7 @@ function isMobile() {
     /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent)
   );
 }
+
 // ...
 // ...
 // ...
@@ -4158,7 +4159,7 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
       color: var(--cwsc-txt-1);
       border: 3px solid var(--cwsc-brdr-1) !important;
       border-radius: 10px;
-      height: 630px !important;
+      height: 630px;
       z-index: 500; }
 
       .tmTable .tmThingSafe { background-color: var(--tm-safe); }
@@ -4194,7 +4195,7 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
       background-color: var(--cwsc-bckg-2);
       border: 2px solid var(--cwsc-brdr-1); }
 
-      #tmBlock.folded { height: 25px !important; }
+      #tmBlock.folded { height: 25px; }
 
       div#tmHeader {
       display: grid;
@@ -4314,7 +4315,7 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
       color: var(--cwsc-txt-1);
       border: 3px solid var(--cwsc-brdr-1) !important;
       border-radius: 10px;
-      height: 520px !important;
+      height: 520px;
       z-index: 500; }
 
       .tmTable .tmThingSafe { background-color: var(--tm-safe); }
@@ -4350,7 +4351,7 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
       background-color: var(--cwsc-bckg-2);
       border: 2px solid var(--cwsc-brdr-1); }
 
-      #tmBlock.folded { height: 25px !important; }
+      #tmBlock.folded { height: 25px; }
 
       div#tmHeader {
       display: grid;
@@ -4779,17 +4780,28 @@ $('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
 
       if (isMobile()) {
         if (globals['tmVariant'] == 0) { // Классик
-          console.log('Компактное минное поле 😨')
+          let css = `
+            <style>
+              #tmBlock { height: 680px !important; }
+              #tmBlock.folded { height: 25px !important; }
+            </style>`
+          $('head').append(css);
         }
         if (globals['tmVariant'] == 1) { // Компакт
-          console.log('Классическое минное поле 😨')
+          let css = `
+            <style>
+              #tmBlock { height: 560px !important; }
+              #tmBlock.folded { height: 25px !important; }
+            </style>`
+          $('head').append(css);
         }
         if (globals['tmVariant'] == 2) { // Горизонт
-          console.log('Горизонтальное минное поле 😨')
+          // Вы молодец
         }
       } else {
-        console.log('Вы с пк 😡')
+        // Вы молодец
       }
+
 
       $('.tmBTNS').on('change', function() {
         let key = this.id;
