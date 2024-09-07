@@ -403,6 +403,12 @@ catch (error) {
   console.error("An error occurred: ", error);
 }
 
+function isMobile() {
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  return (
+    /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent)
+  );
+}
 // ...
 // ...
 // ...
@@ -595,7 +601,7 @@ div#trFive, div#cwmodTrFive {
 width: 100%;
 display: flex; }
 
-div#trSix {
+div#trSix, div#cwmodTrSix {
 width: 100%;
 display: flex; }
 
@@ -623,7 +629,7 @@ margin: 15px 15px 0px 0px;
 padding: 8px;
 border-radius: 5px; }
 
-div#sbBoneCorrect, div#sbLS, div#cmSite, div#cmGame {
+div#sbBoneCorrect, div#sbLS, div#cmSite, div#cmGame, div#cmImEx {
 width: 100%;
 background-color: var(--cwsc-bckg-3);
 display: grid;
@@ -679,8 +685,18 @@ margin-bottom: 5px; }
 
 div.setHead {
 border-bottom: 4px solid var(--cwsc-brdr-4);
+width: 100% !important;
 height: 24px !important;
 margin-bottom: 4px; }
+
+div#cmImEx details {
+margin: 15px 0px; }
+
+div#cmImEx>table {
+margin: 10px 0px; }
+
+div#cmImEx>table p {
+margin: 0px; }
 
 table#defectTable, table#itemTable, table#templateTable, table#replaceTable {
 border: 4px solid var(--cwsc-brdr-5); }
@@ -763,7 +779,7 @@ display: grid;
 justify-content: start;
 margin: 0px 15px 0px 0px; }
 
-button#formButton:hover, button#customButton:hover, button#clearDontReadButton:hover, select#tmVariant:hover, select#selTheme:hover, input.cs-set[type="color"]:hover, input.cs-set[type="number"]:hover, input#inputImport:hover, button#inputExport:hover, input#outputExport:hover, select#cwmodTheme:hover, select#cw3Bkg:hover, select#cw3BkgSize:hover, select#cw3BkgPos:hover, input.cwmod-settings[type="text"]:hover, input.cwmod-settings[type="number"]:hover {
+button#formButton:hover, button#customButton:hover, button#clearDontReadButton:hover, select#tmVariant:hover, select#selTheme:hover, input.cs-set[type="color"]:hover, input.cs-set[type="number"]:hover, input#inputImport:hover, button#inputExport:hover, input#outputExport:hover, select#cwmodTheme:hover, select#cw3Bkg:hover, input#cw3BkgImg:hover, select#cw3BkgSize:hover, select#cw3BkgPos:hover, input.cwmod-settings[type="text"]:hover, input.cwmod-settings[type="number"]:hover, input.cwmod-data-export:hover, input.cwmod-data-import:hover, input.cwmod-data-merge:hover, input#clear-ym-storage:hover {
 border: 2px solid var(--cwsc-brdr-2) !important; }
 
 button#formButton {
@@ -806,7 +822,7 @@ border: 2px solid var(--cwsc-brdr-3);
 border-radius: 3px !important;
 padding: 1px 5px; }
 
-select#cwmodTheme, div#cwmod-settings input.cwmod-settings[type="text"]:not(input#cw3BkgImg) {
+select#cwmodTheme, div#cwmod-settings input.cwmod-settings[type="text"]:not(input#cw3BkgImg), input.cwmod-data-export, input.cwmod-data-import {
 background-color: var(--cwsc-inpt-1);
 color: var(--cwsc-txt-4) !important;
 border: 2px solid var(--cwsc-brdr-3);
@@ -833,6 +849,33 @@ margin: 2px;
 height: 22px !important;
 width: 55px !important; }
 
+input#inputImport, input#outputExport {
+background-color: var(--cwsc-inpt-1);
+color: var(--cwsc-txt-4) !important;
+border: 1px solid var(--cwsc-brdr-4);
+border-radius: 3px;
+margin: 2px;
+height: 22px !important;
+width: 50% !important; }
+
+input.cwmod-data-merge {
+background-color: var(--cwsc-inpt-1);
+color: var(--cwsc-txt-4) !important;
+border: 1px solid var(--cwsc-brdr-4);
+border-radius: 3px;
+margin: 2px;
+height: 22px !important;
+width: 20% !important; }
+
+input#clear-ym-storage {
+background-color: var(--cwsc-inpt-1);
+color: var(--cwsc-txt-4) !important;
+border: 1px solid var(--cwsc-brdr-4);
+border-radius: 3px;
+margin: 2px;
+height: 22px !important;
+width: 90% !important; }
+
 div#cwsSetList input#cgColor[type="color"] {
 margin: 10px 0px; }
 
@@ -845,9 +888,6 @@ margin: 15px 0px; }
 
 table#impExpTable td {
 padding: 0px 5px 10px; }
-
-div#cwsSetList input#inputImport, input#outputExport {
-width: 50%; }
 
 button#inputExport {
 background-color: var(--cwsc-inpt-1);
@@ -905,8 +945,10 @@ font-size: 13px; }
        <div><input class="cs-set" id="phoneFightPanel" type="checkbox"${globals.phoneFightPanel?' checked':''}><label for="phoneFightPanel">Удобная панель боережима для телефонщиков</label></div>
        <div><input class="cs-set" id="friendlyCatWar" type="checkbox"${globals.friendlyCatWar?' checked':''}><label for="friendlyCatWar">Убрать кнопки входа в опасные режимы</label></div>
        <div><input class="cs-set" id="shortFightLog" type="checkbox"${globals.shortFightLog?' checked':''}><label for="shortFightLog">Сокращать лог боережима</label></div>
+
        <div><input class="cs-set" id="fightWarning" type="checkbox"${globals.fightWarning?' checked':''}><label for="fightWarning">Звуковое уведомление при нападении на вас</label></div>
-       <div class="cs-set cs-set-sl" id="fightWarningVol"></div><label for="fightWarningVol"><small><i>Громкость функции</i></small></label>
+       <table><tr><td class="csSlider"><div class="cs-set cs-set-sl" id="fightWarningVol"></div></td><td class="csLabel"><label for="fightWarningVol"><small><i>Громкость функции</i></small></label></td></tr></table>
+
        <div><input class="cs-set" id="deleteFPTitles" type="checkbox"${globals.deleteFPTitles?' checked':''}><label for="deleteFPTitles">Убрать подписи к кнопкам<br><small><i>!!! Только для телефонов</i></small></label></div>
     </div>
 
@@ -927,8 +969,13 @@ font-size: 13px; }
        <div><input class="cs-set" id="tmFolded" type="checkbox"${globals.tmFolded?' checked':''}><label for="tmFolded">Изначально сворачивать окошко</label></div>
        <div><input class="cs-set" id="tmShowVolume" type="checkbox"${globals.tmShowVolume?' checked':''}><label for="tmShowVolume">Громкость в чате от ботов</label></div>
        <div><input class="cs-set" id="tmResetNote" type="checkbox"${globals.tmResetNote?' checked':''}><label for="tmResetNote">Звуковое уведомление при смене карты</label></div>
-       <input class="cs-set" id="tmTecPosX" type="number"${globals.tmTecPosX?' checked':''} style="width: 55px;" step="5"> <input class="cs-set" id="tmTecPosY" type="number"${globals.tmTecPosY?' checked':''} style="width: 55px;" step="5"><label for="tmTecPosY"> Расположение окошка по X/Y px</label>
-       <div class="cs-set cs-set-sl" id="tmResetVolume"></div><label for="tmResetVolume"><small><i>Громкость функции</i></small></label>
+
+       <table><tr><td class="csSlider"><div class="cs-set cs-set-sl" id="tmResetVolume"></div></td><td class="csLabel"><label for="tmResetVolume"><small><i>Громкость функции</i></small></label></td></tr></table>
+
+       <table><tr><td><input class="cs-set" id="tmTecPosX" type="number"${globals.tmTecPosX?' checked':''} style="width: 55px;" step="5"></td><td>
+       <input class="cs-set" id="tmTecPosY" type="number"${globals.tmTecPosY?' checked':''} style="width: 55px;" step="5"></td><td>
+       <label for="tmTecPosY"> Расположение окошка по X/Y px</label></td></tr></table>
+
        <table id="tmVarTable"><tr><td><label for="tmVariant">Внешний вид редактора</label></td><td>
        <select class="cs-set" id="tmVariant">
        <option value="0">Классический</option>
@@ -3742,56 +3789,64 @@ if (globals.fightWarning) {
           <button id="stopButton" class="sirenButtons">Я нанырялся</button><br>
         </div>`
           const cssS = `
-          <style>
-            .sirenButtons {
-            background-color: #333 !important;
-            color: #fff !important;
-            border: 1px solid #000 !important;
-            font-family: Verdana !important;
-            font-size: .9em !important;}
-            .sirenButtons:hover {
-            border: 1px solid #ff0 !important;}
-            div#sblock {
-            position: absolute;
-            top: ${globals.dsY}px;
-            left: ${globals.dsX}px;
-            height: 100px;
-            width: 130px;
-            background-color: #d30d0d;
-            border-radius: 7px !important;
-            z-index: 50;
-            font-family: Montserrat;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            text-align: center;}
-            div#sblock button {
-            margin-top: 4px;}
-            span#sheader {
-            background-color: var(--cwsc-bckg-1);
-            border: 1px solid var(--cwsc-brdr-1);
-            border-radius: 7px 7px 0 0;
-            color: var(--cwsc-txt-4);
-            height: 23px;
-            display: grid;
-            justify-content: center;
-            align-content: center;}
-          </style>`
-          $('head').append(cssS);
-  $('body').on('click', '#startButton', function() {
-    console.log('startObserver called');
-    startObserver();
-    $('#sblock').animate({ backgroundColor: '#21c44f' }, 500);
-  });
+<style>
+button.sirenButtons {
+background-color: var(--cwsc-inpt-1);
+color: var(--cwsc-txt-4) !important;
+border: 2px solid var(--cwsc-brdr-3);
+border-radius: 3px !important;
+width: 100px;
+padding: 2px 5px;
+margin: 0px 0px;
+text-decoration: none;
+font-size: 13px; }
 
-  $('body').on('click', '#stopButton', function() {
-    console.log('stopObserver called');
-    stopObserver();
-    $('#sblock').animate({ backgroundColor: '#d30d0d' }, 500);
-  });
+button.sirenButtons:hover {
+border: 2px solid var(--cwsc-brdr-2) !important; }
+
+div#sblock {
+position: absolute;
+top: ${globals.dsY}px;
+left: ${globals.dsX}px;
+height: 80px;
+width: 130px;
+background-color: var(--cwsc-bckg-3);
+border: 3px solid var(--cwsc-brdr-1) !important;
+border-radius: 7px !important;
+z-index: 50;
+font-family: Montserrat;
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+text-align: center;}
+
+div#sblock button {
+margin-top: 4px;}
+
+span#sheader {
+background-color: var(--cwsc-bckg-1);
+border: 1px solid var(--cwsc-brdr-1);
+color: var(--cwsc-txt-4);
+height: 23px;
+display: grid;
+justify-content: center;
+align-content: center;}
+</style>`
+$('head').append(cssS);
+$('body').on('click', '#startButton', function() {
+console.log('startObserver called');
+startObserver();
+$('#sblock').animate({ backgroundColor: '#65754b' }, 500);
+});
+
+$('body').on('click', '#stopButton', function() {
+console.log('stopObserver called');
+stopObserver();
+$('#sblock').animate({ backgroundColor: '#994e4e' }, 500);
+});
         $('body').append(sirenHtml);
     $("#sblock").draggable({
       containment: "document",
@@ -4721,6 +4776,18 @@ if (globals.fightWarning) {
           $('#cages > tbody > tr > td.tmThingPerehod').removeClass('tmThingPerehod');
         }
       });
+
+      if (isMobile()) {
+        if (globals['tmVariant'] == 0) { // Классик
+          console.log('Компактное минное поле 😨')
+        }
+        if (globals['tmVariant'] == 1) { // Компакт
+          console.log('Классическое минное поле 😨')
+        }
+        if (globals['tmVariant'] == 2) { // Горизонт
+          console.log('Горизонтальное минное поле 😨')
+        }
+      }
 
       $('.tmBTNS').on('change', function() {
         let key = this.id;
