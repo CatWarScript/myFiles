@@ -906,13 +906,13 @@ font-size: 13px; }
       <!--<a href="#" id="info" class="passive" data-target="4">✦ О нас ✦</a>-->
     </div><br></td></tr></tbody></table>
      <div class="contacts">
-       <div><a id="vk" href="https://vk.com/cwscript">
+       <div><a id="vk" href="https://vk.com/cwscript" target="_blank">
          <svg viewBox="0 0 48 48" width="48px" height="48px" version="1.1" id="svg1" sodipodi:docname="icons8-vk-circled.svg" inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs1" /><sodipodi:namedview id="namedview1" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.25" inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1" showgrid="false" inkscape:zoom="15.604167" inkscape:cx="24" inkscape:cy="24" inkscape:window-width="1680" inkscape:window-height="987" inkscape:window-x="1672" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="layer1" /><g inkscape:groupmode="layer" id="layer1" inkscape:label="Layer 1"><path id="circle1" style="display:inline;fill:#1976d2" d="M 24,4 A 20,20 0 0 0 4,24 20,20 0 0 0 24,44 20,20 0 0 0 44,24 20,20 0 0 0 24,4 Z M 12.890625,17 h 2.642578 c 0.660999,0 0.913969,0.29436 1.167969,1.068359 C 17.874171,22.000355 19.627579,25 20.517578,25 20.847578,25 21,24.840937 21,23.960938 V 20.337891 C 20.898,18.468892 20,18.307624 20,17.640625 20,17.319625 20.212141,17 20.619141,17 h 4.648437 C 25.826578,17 26,17.319673 26,18.013672 v 5.185547 C 26,23.786218 26.446047,24 26.623047,24 c 0.33,0 0.64,0.016 1.25,-0.625 1.880998,-2.214998 3.513672,-5.574219 3.513672,-5.574219 C 31.564719,17.399782 31.870251,17 32.53125,17 h 2.617188 c 0.585999,0 0.834609,0.263 0.849609,0.625 0.006,0.125 -0.01455,0.265016 -0.06055,0.416016 -0.33,1.600998 -3.715453,6.351562 -3.689453,6.351562 C 32.104047,24.638578 32.009,24.815 32,25 c -0.009,0.176 0.06105,0.360094 0.248047,0.621094 0.279,0.399999 0.886954,1.135907 1.501953,1.878906 1.109999,1.341999 1.99936,2.750172 2.193359,3.326172 C 35.984359,30.983172 36.003,31.124 36,31.25 35.986,31.745 35.637296,32 35.029297,32 h -2.619141 c -0.991999,0 -1.305158,-0.982002 -3.035156,-3 -1.499999,-1.749998 -2.277204,-2 -2.658203,-2 -0.534,0 -0.71775,0.132595 -0.71875,0.933594 V 30.90625 C 25.998047,31.573249 25.826436,32 24.148438,32 21.37844,32 18.249998,30.124997 15.875,26.875 12.600003,22.393004 12,18.494437 12,17.773438 12,17.373438 12.127626,17 12.890625,17 Z" /></g></svg>
        </a></div>
-       <div><a id="tg" href="https://t.me/cwscript">
+       <div><a id="tg" href="https://t.me/cwscript" target="_blank">
          <svg viewBox="0 0 48 48" width="48px" height="48px" version="1.1" id="svg3" sodipodi:docname="icons8-telegram-app.svg" inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs3" /><sodipodi:namedview id="namedview3" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.25" inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1" inkscape:zoom="15.604167" inkscape:cx="24" inkscape:cy="24" inkscape:window-width="1680" inkscape:window-height="987" inkscape:window-x="1672" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="layer2" /><g inkscape:groupmode="layer" id="layer2" inkscape:label="Layer 1"><path id="circle1" style="fill:#29b6f6" d="M 24 4 A 20 20 0 0 0 4 24 A 20 20 0 0 0 24 44 A 20 20 0 0 0 44 24 A 20 20 0 0 0 24 4 z M 33.375 14 C 33.667 14 34 14.125 34 14.5 C 34 14.75 33.949219 15 33.949219 15 L 30.203125 34.126953 C 30.203125 34.126953 30.042982 35 28.958984 35 C 28.382986 35 28.085937 34.726562 28.085938 34.726562 L 23 30.505859 L 19.574219 33.878906 C 19.574219 33.878906 19.425562 33.993047 19.226562 33.998047 C 19.157564 34.000047 19.083812 33.989078 19.007812 33.955078 L 19.007812 33.957031 C 19.007812 33.957031 18.749734 33.933107 18.427734 32.912109 C 18.106736 31.892111 16 26 16 26 L 16.007812 25.996094 L 16.001953 25.992188 L 10.90625 24.636719 C 10.90625 24.636719 10 24.374998 10 23.625 C 10 23.000002 10.933594 22.701172 10.933594 22.701172 L 32.248047 14.234375 C 32.247047 14.233375 32.9 13.999 33.375 14 z " /></g></svg>
        </a></div>
-       <div><a id="bs" href="https://boosty.to/cwscript">
+       <div><a id="bs" href="https://boosty.to/cwscript" target="_blank">
          <svg width="48" height="48" viewBox="0 0 48 47" version="1.1" id="svg4" sodipodi:docname="logoLetterB.4ec8e (1).svg" inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview id="namedview4" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.25" inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1" inkscape:zoom="8.9571167" inkscape:cx="19.481716" inkscape:cy="24.059081" inkscape:window-width="1680" inkscape:window-height="987" inkscape:window-x="1672" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="svg4" /><defs id="defs4"><linearGradient id="linear0" gradientUnits="userSpaceOnUse" x1="6.4215002" y1="-6.46875" x2="-34.537899" y2="88.152298" gradientTransform="scale(0.557143,0.546512)"><stop offset="0" style="stop-color:rgb(93.72549%,47.058824%,16.078431%);stop-opacity:1;" id="stop1" /><stop offset="0.28" style="stop-color:rgb(94.117647%,41.176471%,16.470588%);stop-opacity:1;" id="stop2" /><stop offset="0.63" style="stop-color:rgb(94.509804%,36.862745%,17.254902%);stop-opacity:1;" id="stop3" /><stop offset="1" style="stop-color:rgb(94.509804%,35.294118%,17.254902%);stop-opacity:1;" id="stop4" /></linearGradient></defs><g id="surface1" transform="translate(4.5004891,0.0390625)"><path style="fill:url(#linear0);fill-rule:evenodd;stroke:none" d="M 9.34375,0 1.242188,28.027344 0.949219,29.011719 c -2.789063,9.636719 0.398437,17.785156 11.769531,17.910156 1.457031,-3.65625 3.46875,-8.699219 6.042969,-15.132813 H 12.601562 L 19.203125,8.847656 C 19.21875,8.792969 19.242188,8.738281 19.269531,8.6875 L 21.78125,0 Z M 27.753906,25.339844 12.761719,46.921875 h 0.234375 c 11.074218,0 22.453125,-8.191406 25.261718,-17.914063 2.621094,-9.03125 -1.832031,-16.503906 -11.332031,-17.496093 l -5.53125,13.828125 z m 0,0" id="path4" /></g></svg>
        </a></div>
      </div></td><td id="tableContent"><!--<div id="search">CatWar Script</div>--><table><tbody><tr><td>
@@ -1181,9 +1181,9 @@ font-size: 13px; }
 </div>
        </div>
      </div>
-     <div id="div2">
+     <div id="div2">Описание варомода | Ссылки на скачивание
      </div>
-     <div id="div3">
+     <div id="div3">Описание шеда | Ссылки на скачивание
      </div>
     </div>
         </div></div></div>
@@ -1237,6 +1237,7 @@ function peredvinutBloki(importFrom, exportTo) {
   const sourceDiv = $(sourceDivSelector);
   const targetDiv = $(targetDivSelector);
   if (sourceDiv.length > 0 && targetDiv.length > 0) {
+    targetDiv.empty();
     sourceDiv.appendTo(targetDiv);
   }
 }
@@ -5343,7 +5344,7 @@ function all() {
 
   // Yuaksoinocenow
 
-    $(document).ready(function() {
+   /* $(document).ready(function() {
   const $trChat = $('#tr_chat');
   const backgroundColor = $trChat.css('background-color');
   const rgbColor = backgroundColor.match(/rgb\((\d+), (\d+), (\d+)\)/);
@@ -5355,7 +5356,7 @@ function all() {
   const newG = Math.round(g * brightnessFactor);
   const newB = Math.round(b * brightnessFactor);
   $trChat.css('background-color', `rgb(${newR}, ${newG}, ${newB})`);
-});
+}); */
 }
 
 // ...
