@@ -1,12 +1,12 @@
 // ==UserScript==
-// @name         CatWar Script DEV
-// @version      1.0
-// @description  Новый мод-скрипт для браузерной игры CatWar. Обычно разработчиков скрипта держат в подвале, чтобы они хоть что-то делали.
+// @name         CatWar Script
+// @version      1.0.1
+// @description  Новый мод-скрипт для браузерной игры CatWar. Админы скрипта летом вышли и потрогали траву.
 // @author       Krivodushie & Psiii
 // @copyright    2024 Запал (https://catwar.su/cat1562064) & Весело (https://catwar.su/cat590698)
 // @license      MIT; https://opensource.org/licenses/MIT
-// @updateURL    1
-// @downloadURL  2
+// @updateURL    //
+// @downloadURL  //
 // @match        *://catwar.su/*
 // @grant        GM_xmlhttpRequest
 // @grant        GM.xmlHttpRequest
@@ -34,8 +34,6 @@ const csDefaults = {
       ,'isDateShow': true //                 Показывать ли дату?
       ,'movableClocks': false //             Перетаскиваемые часы
       ,'clockFontWeight': '17' //            Размер шрифта часов
-
-
 
     ,'customDefects': true //              ОТОБРАЖЕНИЕ ДЕФЕКТОВ В ИГРОВОЙ
      ,'cdSColors': true //                   Выделять ли клетку цветом?
@@ -773,7 +771,7 @@ display: grid;
 justify-content: start;
 margin: 0px 15px 0px 0px; }
 
-button#formButton:hover, button#customButton:hover, button#clearDontReadButton:hover, select#tmVariant:hover, select#selTheme:hover, input.cs-set[type="color"]:hover, input.cs-set[type="number"]:hover, input#inputImport:hover, button#inputExport:hover, input#outputExport:hover, select#cwmodTheme:hover, select#cw3Bkg:hover, input#cw3BkgImg:hover, select#cw3BkgSize:hover, select#cw3BkgPos:hover, input.cwmod-settings[type="text"]:hover, input.cwmod-settings[type="number"]:hover, input.cwmod-data-export:hover, input.cwmod-data-import:hover, input.cwmod-data-merge:hover, input#clear-ym-storage:hover {
+button#formButton:hover, button#customButton:hover, button#clearDontReadButton:hover, select#tmVariant:hover, select#selTheme:hover, input.cs-set[type="color"]:hover, input.cs-set[type="number"]:hover, input#inputImport:hover, button#inputExport:hover, input#outputExport:hover, select#cwmodTheme:hover, select#cw3Bkg:hover, input#cw3BkgImg:hover, select#cw3BkgSize:hover, select#cw3BkgPos:hover, input.cwmod-settings[type="text"]:hover, input.cwmod-settings[type="number"]:hover, input.cwmod-data-export:hover, input.cwmod-data-import:hover, input.cwmod-data-merge:hover, input#clear-ym-storage:hover, button#resetDefectSettings:hover, button#resetItemSettings:hover {
 border: 2px solid var(--cwsc-brdr-2) !important; }
 
 button#formButton {
@@ -891,6 +889,17 @@ border-radius: 3px !important;
 width: fit-content;
 padding: 2px 5px;
 margin: 0px 0px;
+text-decoration: none;
+font-size: 13px; }
+
+button#resetDefectSettings, button#resetItemSettings {
+background-color: var(--cwsc-inpt-1);
+color: var(--cwsc-txt-4) !important;
+border: 2px solid var(--cwsc-brdr-3);
+border-radius: 3px !important;
+width: 35%;
+padding: 2px 5px;
+margin: 0px 0px 10px;
 text-decoration: none;
 font-size: 13px; }
 
@@ -1137,6 +1146,7 @@ font-size: 13px; }
              <td><input class="cs-set" id="cdSGryaz4" type="checkbox"${globals.cdSGryaz4?' checked':''}><input class="cs-set" id="cdSGryaz4B" type="checkbox"${globals.cdSGryaz4B?' checked':''}></td>
            </tr>
          </table><br>
+           <button id="resetDefectSettings">Сбросить настройки дефектов</button>
          <table class="sliderTable"><tr><td class="csSlider"><div class="cs-set cs-set-sl" id="cdOpacity"></div></td><td class="csLabel"><label for="cdOpacity"><small><i>Прозрачность</i></small></label></td></tr></table>
        </div><br>
 
@@ -1175,15 +1185,31 @@ font-size: 13px; }
              <td colspan="2"><input class="cs-set" id="ciSMusor" type="checkbox"${globals.ciSMusor?' checked':''}>
            </tr>
          </table><br>
+         <button id="resetItemSettings">Сбросить настройки предметов</button>
          <table class="sliderTable"><tr><td class="csSlider"><div class="cs-set cs-set-sl" id="ciOpacity"></div></td><td class="csLabel"><label for="ciOpacity"><small><i>Прозрачность</i></small></label></td></tr></table>
        </div>
     </div>
 </div>
        </div>
      </div>
-     <div id="div2">Описание варомода | Ссылки на скачивание
+  <div id="div2"><h2>Варомод</h2><p>
+Данный мод добавляет множество полезных функций, среди которых многим известные:<br>
+– Калькуляторы активности и лун;<br>
+– Заметки об игроках;<br>
+– Отображение аватарок в комментариях под постами;<br>
+– Снежинки в Игровой, когда идёт снег;<br>
+И многое другое! С полным списком функций вы сможете ознакомиться при установке данного скрипта.<br>
+<a href="https://openuserjs.org/scripts/CatWarScript/CatWar_Mod" target="_blank">Ссылка на установку</a> | <a href="https://github.com/CatWarScript/CatWarScript/raw/main/CatWarMod/CatWarMod.user.js" target="_blank">Альт. ссылка</a></p>
      </div>
-     <div id="div3">Описание шеда | Ссылки на скачивание
+  <div id="div3"><h2>CW: Shed</h2>
+    <p>Данный мод добавляет множество полезных функций, среди которых многим известные:<br>
+– Отображение ID в личных сообщениях, чате, а также отображение ID котов, находящихся во рту;<br>
+– Всевозможные звуковые уведомления: о новых сообщениях в ЛС и чате, при нападении на вас, при поднятии вашего персонажа и т.д;<br>
+– Отдельный блок с гибкой настройкой уведомлений для действий, где вы сможете настроить на какие действия будет срабатывать функция;<br>
+– Разноцветные параметры и навыки с полной кастомизацией;<br>
+– Лог чистильщиков, отображающий поднятия и опускания игроков, а также прочие дополнительные данные о них.<br>
+И многое другое! С полным списком функций вы сможете ознакомиться при установке данного скрипта.<br>
+<a href="https://abstract-class-shed.github.io/cwshed/CW_Shed.user.js" target="_blank">Ссылка на установку</a></p>
      </div>
     </div>
         </div></div></div>
@@ -1259,15 +1285,23 @@ $(document).ready(function() { let clickCount = 0; $("#clRemoveAllTongues").clic
      peredvinutBloki("div#cwa_sett", "#div3")
     });
 
-    $(document).ready(function() {
-     const deleteLinks = $('a[href="del"]:contains("Удалить персонажа")');
-      $('#cwsSet hr, #cwsSet div hr, #cwsSet div div hr').addClass('legit');
-       deleteLinks.each(function() {
-        const previousHR = $(this).prevAll('hr');
-        previousHR.addClass('legit');
-       });
-      $('hr:not(.legit)').remove();
+$(document).ready(function() {
+  setTimeout(function() {
+    const deleteLinks = $('a[href="del"]:contains("Удалить персонажа")');
+    $('#cwsSet hr, #cwsSet div hr, #cwsSet div div hr').addClass('legit');
+
+    // Добавляем класс 'legit' к hr с id 'uwu-hr'
+    $('#uwu-hr').addClass('legit');
+    $('div#uwusettings hr').addClass('legit');
+    deleteLinks.each(function() {
+      const previousHR = $(this).prevAll('hr');
+      previousHR.addClass('legit');
     });
+
+    // Удаляем все hr, кроме тех, которые имеют класс 'legit'
+    $('hr:not(.legit)').remove();
+  }, 700);
+});
 
   appendToElementOrFallback('#branch', 'a[href="del"]', html);
 
@@ -1289,8 +1323,23 @@ function clearDontReadMessages() {
   }
 }
 
-$('#clearDontReadButton').on('click', clearDontReadMessages);
+$(document).ready(function() {
+  const targetElements = document.querySelectorAll('a[data-target="2"]');
+  let clickCount = 0;
 
+  targetElements.forEach(element => {
+    element.addEventListener('click', () => {
+      clickCount++;
+      if (clickCount >= 15) {
+        if (confirm("Вы уверены, что хотите очистить localStorage? Все настройки всех модов будут сброшены! Сделайте копии ваших настроек и сохранённых ЛС. Карты лазалок восстановлению не подлежат.")) {
+          localStorage.clear();
+          alert('Все настройки очищены!');
+        }
+      }
+    });
+  });
+});
+$('#clearDontReadButton').on('click', clearDontReadMessages);
 
   $('.cs-set').not('.cs-set-sl').on('change', function() {
       let key = this.id;
@@ -1364,8 +1413,8 @@ $('input[name="iscdsramki"]').on('change', function() {
     });
   });
 
-  let settingsToResetDfct = [ 'customDefectDelay', 'cstmDfctWounds', 'cstmDfctBruise', 'cstmDfctFractures', 'cstmDfctPoison', 'cstmDfctCough', 'cstmDfctDirt', 'cstmDfctOpacity', 'cstmDfctShowColors', 'cstmDfctShowNum', 'cstmDfctShowHighDirt', 'cstmDfctShowLowDirt', 'cstmDfctShow34WoundBetter', 'cstmDfctShowAllBetter' ];
-  let settingsToResetItm = [ 'customItemsDelay', 'cstmItmHerbDelay', 'cstmItmHerbClr', 'cstmItmMossDelay', 'cstmItmMossClr', 'cstmItmWebDelay', 'cstmItmWebClr', 'cstmItmStickDelay', 'cstmItmStickClr', 'cstmItmDustDelay', 'cstmItmDustClr', 'cstmItmOpacity', 'cstmItmMusorDelay', 'cstmItmMusorClr' ];
+  let settingsToResetDfct = [ 'customDefects', 'cdSColors', 'cdSRamki', 'cdOpacity', 'cdSIcon', 'cdCRani', 'cdSRani1', 'cdSRani2', 'cdSRani3', 'cdSRani3B', 'cdSRani4', 'cdSRani4B', 'cdCPoison', 'cdSPoison1', 'cdSPoison2', 'cdSPoison3', 'cdSPoison3B', 'cdSPoison4', 'cdSPoison4B', 'cdCTrauma', 'cdSTrauma1', 'cdSTrauma2', 'cdSTrauma3', 'cdSTrauma3B', 'cdSTrauma4', 'cdSTrauma4B', 'cdCDrown', 'cdSDrown1', 'cdSDrown2', 'cdSDrown3', 'cdSDrown3B', 'cdSDrown4', 'cdSDrown4B', 'cdCGryaz', 'cdSGryaz1', 'cdSGryaz2', 'cdSGryaz3', 'cdSGryaz3B', 'cdSGryaz4', 'cdSGryaz4B', 'cdSCough', 'cdCCough', 'cdSPodstilki', 'cdCPodstilki', 'cdSDivers' ];
+  let settingsToResetItm = [ 'customItems', 'ciSHerb', 'ciCHerb', 'ciSMoss', 'ciCMoss', 'ciSWeb', 'ciCWeb', 'ciSStick', 'ciCStick', 'ciSDust', 'ciCDust', 'ciSMusor', 'ciCMusor', 'ciOpacity' ];
   $('#resetDefectSettings').on('click', function() { resetSettings(settingsToResetDfct); });
   $('#resetItemSettings').on('click', function() { resetSettings(settingsToResetItm); });
 
@@ -1447,6 +1496,9 @@ $('input[name="iscdsramki"]').on('change', function() {
             }});})();
   $(document).ready(function() { let clickCount = 0; const videoUrls = ['https://www.youtube-nocookie.com/embed/1rd4P7uMvvQ?si=TkZTp3GZbxxvcYqV&controls=0', 'https://www.youtube-nocookie.com/embed/elaSoKe1gFw?si=Q5JWB-t06mRZDLra&controls=0', 'https://www.youtube-nocookie.com/embed/8Jk_5Yry_SE?si=cGZXfc39MZl9W9_I&controls=0' ]; $("a.active[data-target='1']").click(function(e) {e.preventDefault(); clickCount++;if (clickCount >= 5) {clickCount = 0; const randomIndex = Math.floor(Math.random() * videoUrls.length); const randomVideoUrl = videoUrls[randomIndex]; const iframe = document.createElement('iframe'); iframe.width = '99%'; iframe.height = '530px'; iframe.src = randomVideoUrl; iframe.title = 'YouTube video player'; iframe.frameborder = '0'; iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'; iframe.allowfullscreen = true; iframe.referrerpolicy = 'strict-origin-when-cross-origin'; $("#tableContent").empty().append(iframe); } }); });
 }
+
+
+
 
 // ...
 // ...
@@ -2859,6 +2911,7 @@ function cw3() {
         let variable = "";
         let color = globals.ciCMoss;
         let opacity = globals.ciOpacity;
+        variable = hexToRGBA(color, opacity);
       let cstmItmMoss = `
         .cage_items[style*='things/75.png'], .cage_items[style*='things/78.png'], .cage_items[style*='things/95.png'] {
         background-color: ${variable} !important;}`
@@ -2868,6 +2921,7 @@ function cw3() {
         let variable = "";
         let color = globals.ciCWeb;
         let opacity = globals.ciOpacity;
+        variable = hexToRGBA(color, opacity);
       let cstmItmWeb = `
         .cage_items[style*='things/20.png'] {
         background-color: ${variable} !important;}`
@@ -2877,6 +2931,7 @@ function cw3() {
         let variable = "";
         let color = globals.ciCStick;
         let opacity = globals.ciOpacity;
+        variable = hexToRGBA(color, opacity);
       let cstmItmSticks = `
         .cage_items[style*='things/565.png'], .cage_items[style*='things/566.png'], .cage_items[style*='things/562.png'], .cage_items[style*='things/563.png'], .cage_items[style*='things/3993.png'] {
         background-color: ${variable} !important;}`
@@ -2886,6 +2941,7 @@ function cw3() {
         let variable = "";
         let color = globals.ciCDust;
         let opacity = globals.ciOpacity;
+        variable = hexToRGBA(color, opacity);
       let cstmItmDust = `
         .cage_items[style*='things/94.png'], .cage_items[style*='things/385.png'], .cage_items[style*='things/386.png'], .cage_items[style*='things/387.png'], .cage_items[style*='things/388.png'], .cage_items[style*='things/389.png'], .cage_items[style*='things/390.png'], .cage_items[style*='things/391.png'], .cage_items[style*='things/392.png'] {
         background-color: ${variable} !important;}`
@@ -2895,6 +2951,7 @@ function cw3() {
         let variable = "";
         let color = globals.ciCMusor;
         let opacity = globals.ciOpacity;
+        variable = hexToRGBA(color, opacity);
       let cstmItmMusor = `
         .cage_items[style*='things/985.png'], .cage_items[style*='things/986.png'], .cage_items[style*='things/987.png'], .cage_items[style*='things/988.png'], .cage_items[style*='things/989.png'] {
         background-color: ${variable} !important;}
@@ -5050,7 +5107,7 @@ function all() {
       --cwsc-brdr-1: #3F2D29;
       --cwsc-brdr-2: #AD7B3C;
       --cwsc-brdr-3: #1b1311;
-      --cwsc-brdr-4: #a07e7740;
+      --cwsc-brdr-4: #5f494540;
       --cwsc-brdr-5: #c9bdb090;
 
       --cwsc-txt-1: #180E0D;
